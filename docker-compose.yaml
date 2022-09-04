@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: debezium/postgres:14-alpine
+    restart: unless-stopped
+    container_name: postgres_sisvoli
+    environment:
+      - POSTGRES_USER=app_sisvoli
+      - POSTGRES_PASSWORD=app_sisvoli
+      - POSTGRES_DB=sisvoli
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U app_sisvoli -d sisvoli" ]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+    volumes:
+      - postgres:/var/lib/postgresql/data
+
+volumes:
+  postgres: { }
