@@ -9719,3 +9719,5 @@ INSERT INTO tb_city VALUES (9711, 27, 'TO', 'Tupiratins');
 INSERT INTO tb_city VALUES (9712, 27, 'TO', 'Venus');
 INSERT INTO tb_city VALUES (9713, 27, 'TO', 'Wanderlandia');
 INSERT INTO tb_city VALUES (9714, 27, 'TO', 'Xambioa');
+
+ALTER TABLE tb_city DROP COLUMN uf;
