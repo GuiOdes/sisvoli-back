@@ -14,11 +14,13 @@ class Teste(
 ) {
 
     @PostMapping("/save")
-    fun teste(): StateModel {
-        return stateSpringDataRepository.save(StateEntity(
-            name = "teste",
-            uf = "as"
-        )).toStateModel()
+    fun save(): StateModel {
+        return stateSpringDataRepository.save(
+            StateEntity(
+                name = "teste",
+                uf = "as"
+            )
+        ).toStateModel()
 
 //        return stateSpringDataRepository.findAll()
 //            .map { it.toStateModel() }

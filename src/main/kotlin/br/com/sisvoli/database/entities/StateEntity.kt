@@ -35,7 +35,7 @@ class StateEntity(
     }
 
     companion object {
-        fun of (stateModel: StateModel): StateEntity {
+        fun of(stateModel: StateModel): StateEntity {
             return StateEntity(
                 id = stateModel.id,
                 name = stateModel.name,

@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "2.7.3"
 	id("io.spring.dependency-management") version "1.0.13.RELEASE"
+	id("io.gitlab.arturbosch.detekt").version("1.21.0")
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
@@ -36,6 +37,29 @@ dependencies {
 	implementation("org.postgresql:postgresql:$postgreSQLVersion")
 	implementation("org.flywaydb:flyway-core:$flywayVersion")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	// Detekt
+	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
+}
+
+detekt {
+	toolVersion = "1.21.0"
+	config = files("config/detekt/detekt.yml")
+	buildUponDefaultConfig = true
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+
+	autoCorrect = true
+
+	baseline.set(file("$projectDir/config/detekt/baseline.xml"))
+
+	reports {
+		xml.required.set(false)
+		html.required.set(false)
+		txt.required.set(false)
+		sarif.required.set(false)
+	}
 }
 
 tasks.withType<KotlinCompile> {

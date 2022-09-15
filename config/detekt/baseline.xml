@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+    <ManuallySuppressedIssues>
+        <ID>UtilityClassWithPublicConstructor:IntegrationTests.kt$IntegrationTests</ID>
+        <ID>UnnecessaryAbstractClass:IntegrationTests.kt$IntegrationTests</ID>
+        <ID>UnnecessaryAbstractClass:UnitTests.kt$UnitTests</ID>
+        <ID>UnnecessaryAbstractClass:BaseResourceIT.kt$BaseResourceIT</ID>
+        <ID>UnnecessaryAbstractClass:UnitTests.kt$UnitTests</ID>
+    </ManuallySuppressedIssues>
+    <CurrentIssues>
+    </CurrentIssues>
+</SmellBaseline>
