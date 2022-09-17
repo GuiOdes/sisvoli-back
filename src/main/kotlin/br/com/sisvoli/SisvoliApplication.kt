@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class SisvoliApplication
 
 fun main(args: Array<String>) {
-	runApplication<SisvoliApplication>(*args)
+    runApplication<SisvoliApplication>(*args)
 }
