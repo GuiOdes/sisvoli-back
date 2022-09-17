@@ -1,5 +1,5 @@
 CREATE TABLE tb_role (
-    id INTEGER NOT NULL,
+    id INTEGER PRIMARY KEY NOT NULL,
     role_name VARCHAR(100) NOT NULL
 );
 
