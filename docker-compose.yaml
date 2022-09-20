@@ -18,6 +18,12 @@ services:
       retries: 30
     volumes:
       - postgres:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          memory: 2048M
+        reservations:
+          memory: 1024M
 
 volumes:
   postgres: { }
