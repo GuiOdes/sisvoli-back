@@ -1,0 +1,2 @@
+ALTER TABLE tb_user ADD COLUMN
+    gender VARCHAR(10) DEFAULT NULL;
