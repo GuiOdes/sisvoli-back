@@ -1,13 +1,10 @@
 package br.com.sisvoli.controllers
 
-import br.com.sisvoli.enums.Gender
-import br.com.sisvoli.models.UserModel
 import br.com.sisvoli.services.UserService
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.LocalDate
 
 @RestController
 @RequestMapping("/ola")
@@ -42,6 +39,6 @@ class Hello(
     }
 
     companion object {
-        val logger = KotlinLogging.logger {  }
+        val logger = KotlinLogging.logger { }
     }
 }
