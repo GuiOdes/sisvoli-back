@@ -3,6 +3,7 @@ package br.com.sisvoli.config.security
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
+import mu.KotlinLogging
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

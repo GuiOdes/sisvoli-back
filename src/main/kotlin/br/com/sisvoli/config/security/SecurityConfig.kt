@@ -36,8 +36,9 @@ class SecurityConfig(
 
         http.authorizeRequests().antMatchers("/login").permitAll()
 
-        http.authorizeRequests().antMatchers("/ola/oi").hasAnyAuthority("ADMIN")
-        http.authorizeRequests().antMatchers("/ola").hasAnyAuthority("DEFAULT")
+        // Verificação de role ao acessar endpoint
+        // http.authorizeRequests().antMatchers("/ola/oi").hasAnyAuthority("ADMIN")
+        // http.authorizeRequests().antMatchers("/ola").hasAnyAuthority("DEFAULT")
 
         http.authorizeRequests().anyRequest().authenticated()
 

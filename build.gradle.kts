@@ -48,6 +48,9 @@ dependencies {
 
 	// JWT
 	implementation("com.auth0:java-jwt:4.0.0")
+
+	// Logging
+	implementation("io.github.microutils:kotlin-logging:3.0.0")
 }
 
 detekt {

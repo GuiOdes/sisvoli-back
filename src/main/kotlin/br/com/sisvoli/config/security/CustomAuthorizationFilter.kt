@@ -21,30 +21,28 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         } else {
             val authorizationHeader = request.getHeader("Authorization")
             if (authorizationHeader.isNullOrBlank().not() && authorizationHeader.startsWith("Bearer ")) {
-                runCatching {
-                    val token = authorizationHeader.substring("Bearer ".length)
-                    val algorithm = Algorithm.HMAC256("secret".toByteArray())
-                    val verifier = JWT.require(algorithm).build()
-                    val decodedJWT = verifier.verify(token)
-                    val username = decodedJWT.subject
-                    val roles = listOf(
-                        decodedJWT.getClaim("roles")
-                            .toString()
-                            .replace("\"", "")
-                            .replace("[", "")
-                            .replace("]", "")
+                val token = authorizationHeader.substring("Bearer ".length)
+                val algorithm = Algorithm.HMAC256("secret".toByteArray())
+                val verifier = JWT.require(algorithm).build()
+                val decodedJWT = verifier.verify(token)
+                val username = decodedJWT.subject
+                val roles = listOf(
+                    decodedJWT.getClaim("roles")
+                        .toString()
+                        .replace("\"", "")
+                        .replace("[", "")
+                        .replace("]", "")
+                )
+                val authorities = mutableListOf<SimpleGrantedAuthority>()
+                roles.forEach {
+                    authorities.add(
+                        SimpleGrantedAuthority(it)
                     )
-                    val authorities = mutableListOf<SimpleGrantedAuthority>()
-                    roles.forEach {
-                        authorities.add(
-                            SimpleGrantedAuthority(it)
-                        )
-                    }
-                    val authenticationToken =
-                        UsernamePasswordAuthenticationToken(username, null, authorities)
-                    SecurityContextHolder.getContext().authentication = authenticationToken
-                    filterChain.doFilter(request, response)
                 }
+                val authenticationToken =
+                    UsernamePasswordAuthenticationToken(username, null, authorities)
+                SecurityContextHolder.getContext().authentication = authenticationToken
+                filterChain.doFilter(request, response)
             } else {
                 filterChain.doFilter(request, response)
             }
