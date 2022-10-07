@@ -13,8 +13,9 @@ group = "br.com"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
-val postgreSQLVersion = "42.5.0"
+val postgreeSQLVersion = "42.5.0"
 val flywayVersion = "9.2.2"
+val springSecurityVersion = "5.7.3"
 
 repositories {
 	mavenCentral()
@@ -34,12 +35,22 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	// Database
-	implementation("org.postgresql:postgresql:$postgreSQLVersion")
+	implementation("org.postgresql:postgresql:$postgreeSQLVersion")
 	implementation("org.flywaydb:flyway-core:$flywayVersion")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
 	// Detekt
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
+
+	// Security
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	testImplementation("org.springframework.security:spring-security-test")
+
+	// JWT
+	implementation("com.auth0:java-jwt:4.0.0")
+
+	// Logging
+	implementation("io.github.microutils:kotlin-logging:3.0.0")
 }
 
 detekt {
