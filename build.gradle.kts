@@ -51,6 +51,9 @@ dependencies {
 
 	// Logging
 	implementation("io.github.microutils:kotlin-logging:3.0.0")
+
+	//Validators
+	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.2.0")
 }
 
 detekt {
