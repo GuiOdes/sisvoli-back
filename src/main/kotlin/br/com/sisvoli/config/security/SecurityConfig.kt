@@ -34,7 +34,14 @@ class SecurityConfig(
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-        http.authorizeRequests().antMatchers("/login").permitAll()
+        http
+            .authorizeRequests()
+            .antMatchers("/login")
+            .permitAll()
+            .and()
+            .authorizeRequests()
+            .antMatchers("/user/new")
+            .permitAll()
 
         // Verificação de role ao acessar endpoint
         // http.authorizeRequests().antMatchers("/ola/oi").hasAnyAuthority("ADMIN")
