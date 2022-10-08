@@ -1,6 +1,8 @@
 package br.com.sisvoli.database.repositories
 
+import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.database.entities.UserEntity
+import br.com.sisvoli.enums.RoleEnum
 import br.com.sisvoli.models.UserModel
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
@@ -11,8 +13,8 @@ class UserRepositoryImpl(
     private val passwordEncoder: BCryptPasswordEncoder,
     private val roleSpringDataRepository: RoleSpringDataRepository
 ) : UserRepository {
-    override fun save(userModel: UserModel): UserModel {
-        val userEntity = UserEntity.of(userModel, roleSpringDataRepository.findByName(userModel.roleName))
+    override fun save(userModel: UserRequest): UserModel {
+        val userEntity = UserEntity.of(userModel, roleSpringDataRepository.findByName(RoleEnum.DEFAULT.name))
         userEntity.password = passwordEncoder.encode(userModel.password)
         return userSpringDataRepository.save(userEntity).toUserModel()
     }

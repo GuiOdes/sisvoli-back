@@ -1,8 +1,9 @@
 package br.com.sisvoli.services
 
 import br.com.colman.simplecpfvalidator.isCpf
+import br.com.sisvoli.api.requests.UserRequest
+import br.com.sisvoli.api.responses.UserResponse
 import br.com.sisvoli.database.repositories.UserRepository
-import br.com.sisvoli.models.UserModel
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -14,9 +15,9 @@ class UserServiceImpl(
     private val userRepository: UserRepository
 ) : UserDetailsService, UserService {
 
-    override fun save(userModel: UserModel): UserModel {
+    override fun save(userModel: UserRequest): UserResponse {
         return if (isCpf(userModel.cpf)) {
-            userRepository.save(userModel)
+            userRepository.save(userModel).toUserResponse()
         } else {
             throw Exception("CPF invalido")
         }
