@@ -1,6 +1,7 @@
 package br.com.sisvoli.api.controllers
 
-import br.com.sisvoli.models.UserModel
+import br.com.sisvoli.api.requests.UserRequest
+import br.com.sisvoli.api.responses.UserResponse
 import br.com.sisvoli.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,7 +16,7 @@ class UserController(
     val userService: UserService
 ) {
     @PostMapping("/new")
-    fun save(@RequestBody userModel: UserModel): ResponseEntity<UserModel> {
+    fun save(@RequestBody userModel: UserRequest): ResponseEntity<UserResponse> {
         return ResponseEntity(userService.save(userModel), HttpStatus.CREATED)
     }
 }
