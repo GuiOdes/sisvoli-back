@@ -1,6 +1,7 @@
 package br.com.sisvoli.exceptions
 
 import br.com.sisvoli.api.responses.ErrorResponse
+import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.HttpRequestMethodNotSupportedException
@@ -24,5 +25,10 @@ class ControllerAdvice {
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun messageNotReadable(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0013).responseEntity()
+    }
+
+    @ExceptionHandler(InvalidCPFException::class)
+    fun invalidCPFException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0015).responseEntity()
     }
 }

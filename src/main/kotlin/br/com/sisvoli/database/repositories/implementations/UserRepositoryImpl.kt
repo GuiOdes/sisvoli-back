@@ -1,7 +1,10 @@
-package br.com.sisvoli.database.repositories
+package br.com.sisvoli.database.repositories.implementations
 
 import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.database.entities.UserEntity
+import br.com.sisvoli.database.repositories.interfaces.UserRepository
+import br.com.sisvoli.database.repositories.springData.RoleSpringDataRepository
+import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
 import br.com.sisvoli.enums.RoleEnum
 import br.com.sisvoli.models.UserModel
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder

@@ -72,5 +72,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.CONFLICT.value(),
         "PS-0014",
         "Voto já computado para a enquete em questão"
+    ),
+    PS_0015(
+        HttpStatus.BAD_REQUEST.value(),
+        "PS-0015",
+        "CPF inválido"
     )
 }

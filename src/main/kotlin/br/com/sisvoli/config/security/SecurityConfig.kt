@@ -42,12 +42,14 @@ class SecurityConfig(
             .authorizeRequests()
             .antMatchers("/user/new")
             .permitAll()
+            .and()
+            .authorizeRequests()
+            .anyRequest()
+            .authenticated()
 
         // Verificação de role ao acessar endpoint
         // http.authorizeRequests().antMatchers("/ola/oi").hasAnyAuthority("ADMIN")
         // http.authorizeRequests().antMatchers("/ola").hasAnyAuthority("DEFAULT")
-
-        http.authorizeRequests().anyRequest().authenticated()
 
         http.addFilter(customAuthenticationFilter)
 

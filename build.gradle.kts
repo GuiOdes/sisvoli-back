@@ -52,8 +52,11 @@ dependencies {
 	// Logging
 	implementation("io.github.microutils:kotlin-logging:3.0.0")
 
-	//Validators
+	// Validators
 	implementation("br.com.colman.simplecpfvalidator:simple-cpf-validator:2.2.0")
+
+	// Feign
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4")
 }
 
 detekt {
