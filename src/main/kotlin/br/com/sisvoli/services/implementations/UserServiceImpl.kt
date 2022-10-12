@@ -5,6 +5,7 @@ import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.api.responses.UserResponse
 import br.com.sisvoli.database.repositories.interfaces.UserRepository
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
+import br.com.sisvoli.models.UserModel
 import br.com.sisvoli.services.interfaces.UserService
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
@@ -23,6 +24,10 @@ class UserServiceImpl(
         } else {
             throw InvalidCPFException()
         }
+    }
+
+    override fun findByUsername(username: String): UserModel {
+        return userRepository.findByUsername(username)
     }
 
     override fun loadUserByUsername(username: String): UserDetails {

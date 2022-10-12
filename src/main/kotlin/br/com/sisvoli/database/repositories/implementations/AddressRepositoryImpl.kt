@@ -17,8 +17,10 @@ class AddressRepositoryImpl(
     val citySpringDataRepository: CitySpringDataRepository
 ) : AddressRepository {
     override fun save(addressModel: AddressModel): AddressModel {
-        val userEntity = userSpringDataRepository.findById(addressModel.userId).orElseThrow { UserNotFoundException() }
-        val cityEntity = citySpringDataRepository.findById(addressModel.cityId).orElseThrow { CityNotFoundException() }
+        val userEntity = userSpringDataRepository.findById(addressModel.userId)
+            .orElseThrow { UserNotFoundException() }
+        val cityEntity = citySpringDataRepository.findById(addressModel.cityId)
+            .orElseThrow { CityNotFoundException() }
 
         val addressEntity = AddressEntity.of(addressModel, cityEntity, userEntity)
 

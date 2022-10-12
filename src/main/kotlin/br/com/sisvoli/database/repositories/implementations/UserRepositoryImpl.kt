@@ -6,6 +6,7 @@ import br.com.sisvoli.database.repositories.interfaces.UserRepository
 import br.com.sisvoli.database.repositories.springData.RoleSpringDataRepository
 import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
 import br.com.sisvoli.enums.RoleEnum
+import br.com.sisvoli.exceptions.notFound.UserNotFoundException
 import br.com.sisvoli.models.UserModel
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Component
@@ -23,6 +24,6 @@ class UserRepositoryImpl(
     }
 
     override fun findByUsername(username: String): UserModel {
-        return userSpringDataRepository.findByUsername(username).toUserModel()
+        return userSpringDataRepository.findByUsername(username)?.toUserModel() ?: throw UserNotFoundException()
     }
 }

@@ -1,11 +1,11 @@
 package br.com.sisvoli.database.entities
 
 import br.com.sisvoli.models.AddressModel
+import org.hibernate.annotations.GenericGenerator
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
@@ -16,7 +16,11 @@ import javax.persistence.Table
 @Table(name = "tb_address")
 class AddressEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
     val id: UUID? = null,
 
     @Column(name = "zip_code", nullable = false, length = 255)
