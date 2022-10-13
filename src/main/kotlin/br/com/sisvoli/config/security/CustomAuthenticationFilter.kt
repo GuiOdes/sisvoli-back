@@ -52,6 +52,7 @@ class CustomAuthenticationFilter(
         val tokens = mutableMapOf<String, String>()
         tokens.put("access_token", accessToken)
         tokens.put("refresh_token", refreshToken)
+        tokens.put("userName", user.username)
         response.contentType = APPLICATION_JSON_VALUE
         ObjectMapper().writeValue(response.outputStream, tokens)
     }

@@ -17,6 +17,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToOne
 import javax.persistence.Table
 import javax.validation.constraints.Email
 
@@ -67,7 +68,10 @@ class UserEntity(
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
-    val role: RoleEntity
+    val role: RoleEntity,
+
+    @OneToOne(mappedBy = "userEntity")
+    val addressEntity: AddressEntity? = null
 ) {
 
     fun toUserModel(): UserModel {

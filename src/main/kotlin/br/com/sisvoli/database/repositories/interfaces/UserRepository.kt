@@ -1,4 +1,4 @@
-package br.com.sisvoli.database.repositories
+package br.com.sisvoli.database.repositories.interfaces
 
 import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.models.UserModel
