@@ -1,7 +1,8 @@
-package br.com.sisvoli.controllers
+package br.com.sisvoli.api.controllers
 
-import br.com.sisvoli.models.UserModel
-import br.com.sisvoli.services.UserService
+import br.com.sisvoli.api.requests.UserRequest
+import br.com.sisvoli.api.responses.UserResponse
+import br.com.sisvoli.services.interfaces.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -15,13 +16,7 @@ class UserController(
     val userService: UserService
 ) {
     @PostMapping("/new")
-    fun save(@RequestBody userModel: UserModel): ResponseEntity<Any?> {
-        return try {
-            ResponseEntity(userService.save(userModel), HttpStatus.CREATED)
-        } catch (e: Exception) {
-            when (e) {
-                else -> ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
-            }
-        }
+    fun save(@RequestBody userModel: UserRequest): ResponseEntity<UserResponse> {
+        return ResponseEntity(userService.save(userModel), HttpStatus.CREATED)
     }
 }

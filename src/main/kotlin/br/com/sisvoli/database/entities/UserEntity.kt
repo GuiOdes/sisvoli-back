@@ -1,5 +1,6 @@
 package br.com.sisvoli.database.entities
 
+import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.enums.Gender
 import br.com.sisvoli.models.UserModel
 import org.hibernate.annotations.CreationTimestamp
@@ -16,6 +17,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToOne
 import javax.persistence.Table
 import javax.validation.constraints.Email
 
@@ -66,7 +68,10 @@ class UserEntity(
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
-    val role: RoleEntity
+    val role: RoleEntity,
+
+    @OneToOne(mappedBy = "userEntity")
+    val addressEntity: AddressEntity? = null
 ) {
 
     fun toUserModel(): UserModel {
@@ -100,6 +105,20 @@ class UserEntity(
                 username = userModel.username,
                 creationDate = userModel.creationDate,
                 updateDate = userModel.updateDate,
+                role = roleEntity
+            )
+        }
+
+        fun of(userRequest: UserRequest, roleEntity: RoleEntity): UserEntity {
+            return UserEntity(
+                name = userRequest.name,
+                gender = Gender.valueOf(userRequest.gender),
+                email = userRequest.email,
+                password = userRequest.password,
+                cpf = userRequest.cpf,
+                phoneNumber = userRequest.phoneNumber,
+                birthDate = userRequest.birthDate,
+                username = userRequest.username,
                 role = roleEntity
             )
         }
