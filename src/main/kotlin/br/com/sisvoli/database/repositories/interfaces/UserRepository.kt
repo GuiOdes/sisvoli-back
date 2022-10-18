@@ -1,9 +1,10 @@
 package br.com.sisvoli.database.repositories.interfaces
 
-import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.models.UserModel
+import java.util.UUID
 
 interface UserRepository {
-    fun save(userModel: UserRequest): UserModel
+    fun save(userModel: UserModel): UserModel
+    fun findById(id: UUID): UserModel
     fun findByUsername(username: String): UserModel
 }
