@@ -742,6 +742,7 @@ style:
     active: true
   SerialVersionUIDInSerializableClass:
     active: true
+    excludes: ['**/database/entities/**']
   SpacingBetweenPackageAndImports:
     active: false
   ThrowsCount:
