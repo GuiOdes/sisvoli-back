@@ -7,6 +7,8 @@ import br.com.sisvoli.services.interfaces.UserService
 import br.com.sisvoli.util.JWTUtil
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,5 +29,10 @@ class UserController(
     fun update(@RequestBody userUpdateRequest: UserUpdateRequest): ResponseEntity<UserResponse> {
         val username = jwtUtil.getUsername()
         return ResponseEntity(userService.update(userUpdateRequest, username), HttpStatus.OK)
+    }
+
+    @PatchMapping("/password-recover/{cpf}")
+    fun passwordRecover(@PathVariable cpf: String) {
+        userService.passwordRecoverByCpf(cpf)
     }
 }
