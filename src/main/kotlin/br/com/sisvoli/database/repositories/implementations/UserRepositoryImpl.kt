@@ -27,4 +27,8 @@ class UserRepositoryImpl(
     override fun findByUsername(username: String): UserModel {
         return userSpringDataRepository.findByUsername(username)?.toUserModel() ?: throw UserNotFoundException()
     }
+
+    override fun existsByEmail(email: String): Boolean {
+        return userSpringDataRepository.existsByEmail(email)
+    }
 }

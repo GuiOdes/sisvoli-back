@@ -51,6 +51,10 @@ class UserServiceImpl(
         val user = userRepository.findByUsername(username)
         return User(user.username, user.password, listOf(SimpleGrantedAuthority(user.roleName)))
     }
+
+    override fun emailAvailable(email: String): Boolean {
+        return !userRepository.existsByEmail(email)
+    }
     private fun isCpf(cpf: String) = cpf.isCpf()
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)

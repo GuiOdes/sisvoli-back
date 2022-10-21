@@ -53,8 +53,7 @@ class ControllerAdvice {
             ErrorMessages.PS_0016.httpCode,
             ErrorMessages.PS_0016.message,
             ErrorMessages.PS_0016.code,
-            ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.defaultMessage?:"Invalid", it.field) }
-
+            ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage?:"Invalid" )}
         )
         return ResponseEntity(erro, HttpStatus.UNPROCESSABLE_ENTITY)
     }
