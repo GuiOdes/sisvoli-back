@@ -77,5 +77,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.BAD_REQUEST.value(),
         "PS-0015",
         "CPF inválido"
+    ),
+    PS_0016(
+        HttpStatus.UNPROCESSABLE_ENTITY.value(),
+        "PS-0016",
+        "Invalid Request"
     )
 }
