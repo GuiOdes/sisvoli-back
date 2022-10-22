@@ -29,4 +29,13 @@ class PasswordRecoverTokenRepositoryImpl(
             )
         ).toPasswordRecoveryTokenModel()
     }
+
+    override fun findByUserDocument(userDocument: String): PasswordRecoveryTokenModel? {
+        return passwordRecoveryTokenSpringDataRepository
+            .findByUserEntityCpf(userDocument)?.toPasswordRecoveryTokenModel()
+    }
+
+    override fun deleteByTokenAndUserDocument(token: String, cpf: String) {
+        passwordRecoveryTokenSpringDataRepository.deleteByTokenAndUserEntityCpf(token, cpf)
+    }
 }

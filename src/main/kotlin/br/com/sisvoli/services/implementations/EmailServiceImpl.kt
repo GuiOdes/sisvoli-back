@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service
 class EmailServiceImpl(
     private val mailSender: JavaMailSender
 ) : EmailService {
+    val emailFrom = "sisvoli.app@gmail.com"
 
     override fun sendMail(mailRequest: MailRequest) {
         val message = SimpleMailMessage()
-        message.setFrom(mailRequest.emailFrom)
+        message.setFrom(emailFrom)
         message.setTo(mailRequest.emailTo)
         message.setSubject(mailRequest.subject)
         message.setText(mailRequest.text)

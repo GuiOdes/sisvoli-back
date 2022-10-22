@@ -1,5 +1,6 @@
 package br.com.sisvoli.api.controllers
 
+import br.com.sisvoli.api.requests.PasswordRecoverRequest
 import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.api.requests.UserUpdateRequest
 import br.com.sisvoli.api.responses.UserResponse
@@ -28,11 +29,21 @@ class UserController(
     @PutMapping("/update")
     fun update(@RequestBody userUpdateRequest: UserUpdateRequest): ResponseEntity<UserResponse> {
         val username = jwtUtil.getUsername()
-        return ResponseEntity(userService.update(userUpdateRequest, username), HttpStatus.OK)
+        return ResponseEntity(userService.updateByUsername(userUpdateRequest, username), HttpStatus.OK)
     }
 
     @PatchMapping("/password-recover/{cpf}")
     fun passwordRecover(@PathVariable cpf: String) {
-        userService.passwordRecoverByCpf(cpf)
+        userService.requestPasswordRecoverByCpf(cpf)
+    }
+
+    @PostMapping("/password-recover/response")
+    fun tokenRecoverValidation(@RequestBody passwordRecoverRequest: PasswordRecoverRequest): Boolean {
+        return userService.tokenRecoverValidation(passwordRecoverRequest)
+    }
+
+    @PostMapping("/password-recover/update-password")
+    fun updatePassword(@RequestBody passwordRecoverRequest: PasswordRecoverRequest) {
+        return userService.updatePassword(passwordRecoverRequest)
     }
 }

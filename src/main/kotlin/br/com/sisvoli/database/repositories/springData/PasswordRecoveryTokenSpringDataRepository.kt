@@ -6,4 +6,6 @@ import java.util.UUID
 
 interface PasswordRecoveryTokenSpringDataRepository : JpaRepository<PasswordRecoveryTokenEntity, UUID> {
     fun findByUserEntityId(userId: UUID): PasswordRecoveryTokenEntity?
+    fun findByUserEntityCpf(cpf: String): PasswordRecoveryTokenEntity?
+    fun deleteByTokenAndUserEntityCpf(token: String, cpf: String)
 }
