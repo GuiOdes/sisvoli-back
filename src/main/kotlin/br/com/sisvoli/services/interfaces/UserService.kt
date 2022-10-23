@@ -14,4 +14,5 @@ interface UserService {
     fun requestPasswordRecoverByCpf(userCpf: String): UUID
     fun tokenRecoverValidation(passwordRecoverRequest: PasswordRecoverRequest): Boolean
     fun updatePassword(passwordRecoverRequest: PasswordRecoverRequest)
+    fun emailAvailable(email: String): Boolean
 }

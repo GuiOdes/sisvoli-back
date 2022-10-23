@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/user")
@@ -23,7 +24,7 @@ class UserController(
     val jwtUtil: JWTUtil
 ) {
     @PostMapping("/new")
-    fun save(@RequestBody userModel: UserRequest): ResponseEntity<UserResponse> {
+    fun save(@RequestBody @Valid userModel: UserRequest): ResponseEntity<UserResponse> {
         return ResponseEntity(userService.save(userModel), HttpStatus.CREATED)
     }
     @PutMapping("/update")

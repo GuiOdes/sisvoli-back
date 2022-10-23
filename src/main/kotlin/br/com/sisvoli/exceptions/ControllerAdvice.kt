@@ -2,6 +2,7 @@ package br.com.sisvoli.exceptions
 
 import br.com.sisvoli.api.responses.ErrorResponse
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
+import br.com.sisvoli.api.responses.FieldErrorResponse
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.web.HttpRequestMethodNotSupportedException
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
@@ -69,4 +71,16 @@ class ControllerAdvice {
     fun invalidTokenException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0018).responseEntity()
     }
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleMethodArgumentNotValidException
+    (ex: MethodArgumentNotValidException, request: WebRequest): ResponseEntity<ErrorResponse>{
+        val erro = ErrorResponse(
+            ErrorMessages.PS_0016.httpCode,
+            ErrorMessages.PS_0016.message,
+            ErrorMessages.PS_0016.code,
+            ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage?:"Invalid" )}
+        )
+        return ResponseEntity(erro, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
+
 }
