@@ -57,6 +57,9 @@ dependencies {
 
 	// Feign
 	implementation("org.springframework.cloud:spring-cloud-starter-openfeign:3.1.4")
+
+	// Mail
+	implementation("org.springframework.boot:spring-boot-starter-mail:2.7.4")
 }
 
 detekt {
