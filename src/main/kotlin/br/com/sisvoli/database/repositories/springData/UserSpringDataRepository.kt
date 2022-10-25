@@ -7,5 +7,6 @@ import java.util.UUID
 interface UserSpringDataRepository : JpaRepository<UserEntity, UUID> {
 
     fun findByUsername(username: String): UserEntity?
+    fun findByCpf(cpf: String): UserEntity?
     fun existsByEmail(email: String): Boolean
 }

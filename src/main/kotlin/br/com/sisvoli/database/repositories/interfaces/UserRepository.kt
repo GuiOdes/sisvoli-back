@@ -1,5 +1,6 @@
 package br.com.sisvoli.database.repositories.interfaces
 
+import br.com.sisvoli.models.PasswordRecoveryTokenModel
 import br.com.sisvoli.models.UserModel
 import java.util.UUID
 
@@ -8,4 +9,6 @@ interface UserRepository {
     fun findById(id: UUID): UserModel
     fun findByUsername(username: String): UserModel
     fun existsByEmail(email: String): Boolean
+    fun findByCpf(cpf: String): UserModel
+    fun findRecoverTokenByUserId(userId: UUID): PasswordRecoveryTokenModel?
 }

@@ -5,3 +5,15 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   jackson:
     default-property-inclusion: non_null
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: ${EMAIL_LOGIN}
+    password: ${EMAIL_PASSWORD}
+    port: 587
