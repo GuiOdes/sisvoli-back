@@ -5,6 +5,7 @@ import br.com.sisvoli.api.responses.PollResponse
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.util.JWTUtil
+import org.apache.tomcat.jni.Poll
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -26,7 +27,7 @@ class PollController (
         return ResponseEntity(pollService.save(pollRequest, username), HttpStatus.CREATED)
     }
     @GetMapping("/list")
-    fun findAll(@RequestParam title: String?): List<Unit> {
-        return pollService.findAll(title).map{it.toModel()}
+    fun findAll(): List<PollModel> {
+        return pollService.findAll().toList()
     }
 }

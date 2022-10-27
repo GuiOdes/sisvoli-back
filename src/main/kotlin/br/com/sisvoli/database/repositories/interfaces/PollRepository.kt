@@ -5,5 +5,5 @@ import br.com.sisvoli.models.PollModel
 
 interface PollRepository {
     fun save(pollModel: PollModel): PollModel
-    fun findAll(): MutableList<PollEntity>
+    fun findAll(): List<PollModel>
 }

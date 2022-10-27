@@ -1,6 +1,7 @@
 package br.com.sisvoli.services.implementations
 
 import br.com.sisvoli.api.requests.PollRequest
+import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.models.PollModel
@@ -25,10 +26,7 @@ class PollServiceImpl (
         return pollRepository.save(pollModel)
     }
 
-    override fun findAll(title: String?): List<PollModel> {
-        title?.let {
-            return pollRepository.findByTitleContainingIgnoreCase(it)
-        }
-        return pollRepository.findAll().toList()
+    override fun findAll(): List<PollModel> {
+        return pollRepository.findAll()
     }
 }

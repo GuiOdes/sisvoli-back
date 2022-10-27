@@ -21,8 +21,8 @@ class PollRepositoryImpl(
         return pollSpringDataRepository.save(pollEntity).toPollModel()
     }
 
-    override fun findAll(): MutableList<PollEntity> {
-        return pollSpringDataRepository.findAll()
+    override fun findAll(): List<PollModel> {
+        return pollSpringDataRepository.findAll().map { it.toPollModel() }
     }
 
 }
