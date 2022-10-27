@@ -89,7 +89,7 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         "Token inválido"
     ),
     PS_0016(
-        HttpStatus.UNPROCESSABLE_ENTITY.value(),
+        HttpStatus.BAD_REQUEST.value(),
         "PS-0016",
         "Invalid Request"
     )

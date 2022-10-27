@@ -80,7 +80,7 @@ class ControllerAdvice {
             ErrorMessages.PS_0016.code,
             ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage?:"Invalid" )}
         )
-        return ResponseEntity(erro, HttpStatus.UNPROCESSABLE_ENTITY)
+        return ResponseEntity(erro, HttpStatus.BAD_REQUEST)
     }
 
 }

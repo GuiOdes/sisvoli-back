@@ -16,7 +16,6 @@ class AddressController(
     val jwtUtil: JWTUtil
 ) {
 
-    @PostMapping
     fun save(@RequestBody addressModel: AddressRequest): AddressModel {
         val usernameRequest = jwtUtil.getUsername()
         return addressService.save(addressModel, usernameRequest)
