@@ -4,6 +4,6 @@ import br.com.sisvoli.database.entities.PollEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 
-interface PollSpringDataRepository: JpaRepository<PollEntity, UUID> {
-
+interface PollSpringDataRepository : JpaRepository<PollEntity, UUID> {
+    fun findAllByUserOwnerId(userID: UUID): List<PollEntity>
 }

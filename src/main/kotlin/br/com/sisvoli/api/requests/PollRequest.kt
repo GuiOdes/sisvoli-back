@@ -6,7 +6,7 @@ import br.com.sisvoli.models.PollModel
 import java.time.LocalDateTime
 import java.util.UUID
 
-data class PollRequest (
+data class PollRequest(
     val title: String,
     val description: String,
     val startDate: LocalDateTime,

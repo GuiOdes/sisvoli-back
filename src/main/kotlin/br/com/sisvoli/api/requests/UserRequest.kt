@@ -5,7 +5,6 @@ import br.com.sisvoli.models.UserModel
 import br.com.sisvoli.validation.CpfAvailable
 import br.com.sisvoli.validation.EmailAvailable
 import br.com.sisvoli.validation.UsernameAvailable
-import org.hibernate.validator.constraints.br.CPF
 import java.time.LocalDate
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty

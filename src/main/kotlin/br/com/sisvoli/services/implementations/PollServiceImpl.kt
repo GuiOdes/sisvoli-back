@@ -1,7 +1,6 @@
 package br.com.sisvoli.services.implementations
 
 import br.com.sisvoli.api.requests.PollRequest
-import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.models.PollModel
@@ -11,15 +10,15 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class PollServiceImpl (
+class PollServiceImpl(
     private val pollRepository: PollRepository,
     private val userService: UserService
-): PollService{
+) : PollService {
     override fun save(pollRequest: PollRequest, username: String): PollModel {
         val userId = userService.findByUsername(username).id
-        val pollStatus = if (pollRequest.startDate > LocalDateTime.now()){
+        val pollStatus = if (pollRequest.startDate > LocalDateTime.now()) {
             PollStatus.SCHEDULED
-        }else{
+        } else {
             PollStatus.PROGRESS
         }
         val pollModel = pollRequest.toPollModel(userId!!, pollStatus)
@@ -28,5 +27,10 @@ class PollServiceImpl (
 
     override fun findAll(): List<PollModel> {
         return pollRepository.findAll()
+    }
+
+    override fun findAllByLoggedUser(username: String): List<PollModel> {
+        val userID = userService.findByUsername(username).id
+        return pollRepository.findAllByLoggedUser(userID!!)
     }
 }
