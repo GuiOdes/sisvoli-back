@@ -5,5 +5,6 @@ import br.com.sisvoli.models.PollModel
 
 interface PollService {
     fun save(pollRequest: PollRequest, username: String): PollModel
+    fun findAll(name: String?): List<PollModel>
 
 }

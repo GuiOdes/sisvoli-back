@@ -24,4 +24,11 @@ class PollServiceImpl (
         val pollModel = pollRequest.toPollModel(userId!!, pollStatus)
         return pollRepository.save(pollModel)
     }
+
+    override fun findAll(title: String?): List<PollModel> {
+        title?.let {
+            return pollRepository.findByTitleContainingIgnoreCase(it)
+        }
+        return pollRepository.findAll().toList()
+    }
 }
