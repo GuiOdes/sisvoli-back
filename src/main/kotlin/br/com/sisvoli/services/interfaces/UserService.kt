@@ -15,4 +15,6 @@ interface UserService {
     fun tokenRecoverValidation(passwordRecoverRequest: PasswordRecoverRequest): Boolean
     fun updatePassword(passwordRecoverRequest: PasswordRecoverRequest)
     fun emailAvailable(email: String): Boolean
+    fun cpfAvailable(cpf: String): Boolean
+    fun usernameAvailable(username: String): Boolean
 }

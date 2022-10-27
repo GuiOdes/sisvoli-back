@@ -11,4 +11,6 @@ interface UserRepository {
     fun existsByEmail(email: String): Boolean
     fun findByCpf(cpf: String): UserModel
     fun findRecoverTokenByUserId(userId: UUID): PasswordRecoveryTokenModel?
+    fun existsByCpf(cpf: String): Boolean
+    fun existsByUsername(username: String): Boolean
 }
