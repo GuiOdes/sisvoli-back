@@ -171,7 +171,7 @@ class UserServiceImpl(
         return User(user.cpf, user.password, listOf(SimpleGrantedAuthority(user.roleName)))
     }
 
-    override fun emailAvailable(email: String): Boolean {
+    override fun existsByEmail(email: String): Boolean {
         return !userRepository.existsByEmail(email)
     }
 
@@ -179,13 +179,14 @@ class UserServiceImpl(
         return userRepository.findByCpf(cpf)
     }
 
-    override fun cpfAvailable(cpf: String): Boolean {
+    override fun existsByCpf(cpf: String): Boolean {
         return !userRepository.existsByCpf(cpf)
     }
 
-    override fun usernameAvailable(username: String): Boolean {
+    override fun existsByUsername(username: String): Boolean {
         return !userRepository.existsByUsername(username)
     }
+
     private fun isCpf(cpf: String) = cpf.isCpf()
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)

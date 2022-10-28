@@ -11,6 +11,6 @@ class UsernameAvailableValidator(
         if (value.isNullOrEmpty()) {
             return false
         }
-        return userService.usernameAvailable(value)
+        return userService.existsByUsername(value)
     }
 }

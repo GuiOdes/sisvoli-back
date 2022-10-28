@@ -16,9 +16,9 @@ interface UserService {
     fun requestPasswordRecoverByCpf(userCpf: String): UUID
     fun tokenRecoverValidation(passwordRecoverRequest: PasswordRecoverRequest): Boolean
     fun updatePassword(passwordRecoverRequest: PasswordRecoverRequest)
-    fun emailAvailable(email: String): Boolean
+    fun existsByEmail(email: String): Boolean
     fun findByCpf(cpf: String): UserModel
     fun doRefreshToken(authorizationHeader: String?, request: HttpServletRequest, response: HttpServletResponse)
-    fun cpfAvailable(cpf: String): Boolean
-    fun usernameAvailable(username: String): Boolean
+    fun existsByCpf(cpf: String): Boolean
+    fun existsByUsername(username: String): Boolean
 }
