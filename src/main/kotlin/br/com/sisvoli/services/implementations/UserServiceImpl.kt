@@ -6,15 +6,22 @@ import br.com.sisvoli.api.requests.PasswordRecoverRequest
 import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.api.requests.UserUpdateRequest
 import br.com.sisvoli.api.responses.UserResponse
+import br.com.sisvoli.config.security.CustomAuthenticationFilter
 import br.com.sisvoli.database.repositories.interfaces.UserRepository
 import br.com.sisvoli.enums.RoleEnum
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
+import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.models.UserModel
 import br.com.sisvoli.services.interfaces.EmailService
 import br.com.sisvoli.services.interfaces.PasswordRecoverTokenService
 import br.com.sisvoli.services.interfaces.UserService
+import br.com.sisvoli.util.getMillisByMinute
+import com.auth0.jwt.JWT
+import com.auth0.jwt.algorithms.Algorithm
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.http.MediaType
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -23,7 +30,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
+import java.util.Date
 import java.util.UUID
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.transaction.Transactional
 
 @Service
@@ -33,6 +43,39 @@ class UserServiceImpl(
     private val passwordRecoverTokenService: PasswordRecoverTokenService,
     private val emailService: EmailService
 ) : UserDetailsService, UserService {
+
+    override fun doRefreshToken(
+        authorizationHeader: String?,
+        request: HttpServletRequest,
+        response: HttpServletResponse
+    ) {
+        if (authorizationHeader.isNullOrBlank().not() && authorizationHeader!!.startsWith("Bearer ")) {
+            val refreshToken = authorizationHeader.substring("Bearer ".length)
+            val algorithm = Algorithm.HMAC256("secret".toByteArray())
+            val verifier = JWT.require(algorithm).build()
+            val decodedJWT = verifier.verify(refreshToken)
+            val userDocument = decodedJWT.subject
+            val userModel = findByCpf(userDocument)
+
+            val accessToken = JWT.create()
+                .withSubject(userModel.username)
+                .withExpiresAt(
+                    Date(System.currentTimeMillis() + getMillisByMinute(CustomAuthenticationFilter.TEN_MINUTES))
+                )
+                .withIssuer(request.requestURL.toString())
+                .withClaim("roles", userModel.roleName)
+                .sign(algorithm)
+
+            val responseAttributes = mutableMapOf<String, String>()
+            responseAttributes.put("access_token", accessToken)
+            responseAttributes.put("refresh_token", refreshToken)
+            responseAttributes.put("userCpf", userModel.cpf)
+            response.contentType = MediaType.APPLICATION_JSON_VALUE
+            ObjectMapper().writeValue(response.outputStream, responseAttributes)
+        } else {
+            throw InvalidRefreshTokenException()
+        }
+    }
 
     override fun save(userRequest: UserRequest): UserResponse {
         return if (isCpf(userRequest.cpf)) {
@@ -124,21 +167,26 @@ class UserServiceImpl(
     }
 
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository.findByUsername(username)
-        return User(user.username, user.password, listOf(SimpleGrantedAuthority(user.roleName)))
+        val user = userRepository.findByCpf(username)
+        return User(user.cpf, user.password, listOf(SimpleGrantedAuthority(user.roleName)))
     }
 
-    override fun emailAvailable(email: String): Boolean {
+    override fun existsByEmail(email: String): Boolean {
         return !userRepository.existsByEmail(email)
     }
 
-    override fun cpfAvailable(cpf: String): Boolean {
+    override fun findByCpf(cpf: String): UserModel {
+        return userRepository.findByCpf(cpf)
+    }
+
+    override fun existsByCpf(cpf: String): Boolean {
         return !userRepository.existsByCpf(cpf)
     }
 
-    override fun usernameAvailable(username: String): Boolean {
+    override fun existsByUsername(username: String): Boolean {
         return !userRepository.existsByUsername(username)
     }
+
     private fun isCpf(cpf: String) = cpf.isCpf()
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)

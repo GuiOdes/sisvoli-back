@@ -9,6 +9,6 @@ class EmailAvailableValidator(private val userService: UserService) : Constraint
         if (value.isNullOrEmpty()) {
             return false
         }
-        return userService.emailAvailable(value)
+        return userService.existsByEmail(value)
     }
 }
