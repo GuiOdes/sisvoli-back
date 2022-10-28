@@ -6,7 +6,6 @@ import br.com.sisvoli.api.requests.PasswordRecoverRequest
 import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.api.requests.UserUpdateRequest
 import br.com.sisvoli.api.responses.UserResponse
-import br.com.sisvoli.config.security.CustomAuthenticationFilter
 import br.com.sisvoli.database.repositories.interfaces.UserRepository
 import br.com.sisvoli.enums.RoleEnum
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
@@ -57,18 +56,12 @@ class UserServiceImpl(
             val userDocument = decodedJWT.subject
             val userModel = findByCpf(userDocument)
 
-            val accessToken = JWT.create()
-                .withSubject(userModel.username)
-                .withExpiresAt(
-                    Date(System.currentTimeMillis() + getMillisByMinute(CustomAuthenticationFilter.TEN_MINUTES))
-                )
-                .withIssuer(request.requestURL.toString())
-                .withClaim("roles", userModel.roleName)
-                .sign(algorithm)
+            val accessToken = generateToken(userModel, request, algorithm, AUTH_TOKEN_EXPIRATION_MINUTES)
+            val newRefreshToken = generateToken(userModel, request, algorithm, REFRESH_TOKEN_EXPIRATION_MINUTES)
 
             val responseAttributes = mutableMapOf<String, String>()
             responseAttributes.put("access_token", accessToken)
-            responseAttributes.put("refresh_token", refreshToken)
+            responseAttributes.put("refresh_token", newRefreshToken)
             responseAttributes.put("userCpf", userModel.cpf)
             response.contentType = MediaType.APPLICATION_JSON_VALUE
             ObjectMapper().writeValue(response.outputStream, responseAttributes)
@@ -76,6 +69,20 @@ class UserServiceImpl(
             throw InvalidRefreshTokenException()
         }
     }
+
+    private fun generateToken(
+        userModel: UserModel,
+        request: HttpServletRequest,
+        algorithm: Algorithm?,
+        minutesExpiration: Int
+    ) = JWT.create()
+        .withSubject(userModel.username)
+        .withExpiresAt(
+            Date(System.currentTimeMillis() + getMillisByMinute(minutesExpiration))
+        )
+        .withIssuer(request.requestURL.toString())
+        .withClaim("roles", userModel.roleName)
+        .sign(algorithm)
 
     override fun save(userRequest: UserRequest): UserResponse {
         return if (isCpf(userRequest.cpf)) {
@@ -190,4 +197,9 @@ class UserServiceImpl(
     private fun isCpf(cpf: String) = cpf.isCpf()
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)
+
+    companion object {
+        private const val AUTH_TOKEN_EXPIRATION_MINUTES = 10
+        private const val REFRESH_TOKEN_EXPIRATION_MINUTES = 30
+    }
 }
