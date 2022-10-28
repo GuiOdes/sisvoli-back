@@ -6,6 +6,8 @@ import br.com.sisvoli.api.requests.UserUpdateRequest
 import br.com.sisvoli.api.responses.UserResponse
 import br.com.sisvoli.models.UserModel
 import java.util.UUID
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 interface UserService {
     fun save(userRequest: UserRequest): UserResponse
@@ -16,4 +18,5 @@ interface UserService {
     fun updatePassword(passwordRecoverRequest: PasswordRecoverRequest)
     fun emailAvailable(email: String): Boolean
     fun findByCpf(cpf: String): UserModel
+    fun doRefreshToken(authorizationHeader: String?, request: HttpServletRequest, response: HttpServletResponse)
 }
