@@ -1,9 +1,7 @@
 package br.com.sisvoli.config.security
 
-import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.auth0.jwt.exceptions.TokenExpiredException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
@@ -23,32 +21,28 @@ class CustomAuthorizationFilter : OncePerRequestFilter() {
         } else {
             val authorizationHeader = request.getHeader("Authorization")
             if (authorizationHeader.isNullOrBlank().not() && authorizationHeader.startsWith("Bearer ")) {
-                try {
-                    val token = authorizationHeader.substring("Bearer ".length)
-                    val algorithm = Algorithm.HMAC256("secret".toByteArray())
-                    val verifier = JWT.require(algorithm).build()
-                    val decodedJWT = verifier.verify(token)
-                    val username = decodedJWT.subject
-                    val roles = listOf(
-                        decodedJWT.getClaim("roles")
-                            .toString()
-                            .replace("\"", "")
-                            .replace("[", "")
-                            .replace("]", "")
+                val token = authorizationHeader.substring("Bearer ".length)
+                val algorithm = Algorithm.HMAC256("secret".toByteArray())
+                val verifier = JWT.require(algorithm).build()
+                val decodedJWT = verifier.verify(token)
+                val username = decodedJWT.subject
+                val roles = listOf(
+                    decodedJWT.getClaim("roles")
+                        .toString()
+                        .replace("\"", "")
+                        .replace("[", "")
+                        .replace("]", "")
+                )
+                val authorities = mutableListOf<SimpleGrantedAuthority>()
+                roles.forEach {
+                    authorities.add(
+                        SimpleGrantedAuthority(it)
                     )
-                    val authorities = mutableListOf<SimpleGrantedAuthority>()
-                    roles.forEach {
-                        authorities.add(
-                            SimpleGrantedAuthority(it)
-                        )
-                    }
-                    val authenticationToken =
-                        UsernamePasswordAuthenticationToken(username, null, authorities)
-                    SecurityContextHolder.getContext().authentication = authenticationToken
-                    filterChain.doFilter(request, response)
-                } catch (e: InvalidTokenException) {
-
                 }
+                val authenticationToken =
+                    UsernamePasswordAuthenticationToken(username, null, authorities)
+                SecurityContextHolder.getContext().authentication = authenticationToken
+                filterChain.doFilter(request, response)
             } else {
                 filterChain.doFilter(request, response)
             }

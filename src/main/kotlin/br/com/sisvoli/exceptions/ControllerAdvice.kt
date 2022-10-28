@@ -1,8 +1,8 @@
 package br.com.sisvoli.exceptions
 
 import br.com.sisvoli.api.responses.ErrorResponse
-import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.api.responses.FieldErrorResponse
+import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
@@ -75,12 +75,12 @@ class ControllerAdvice {
     }
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException
-    (ex: MethodArgumentNotValidException, request: WebRequest): ResponseEntity<ErrorResponse>{
+    (ex: MethodArgumentNotValidException, request: WebRequest): ResponseEntity<ErrorResponse> {
         val erro = ErrorResponse(
             ErrorMessages.PS_0016.httpCode,
             ErrorMessages.PS_0016.message,
             ErrorMessages.PS_0016.code,
-            ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage?:"Invalid" )}
+            ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage ?: "Invalid") }
         )
         return ResponseEntity(erro, HttpStatus.UNPROCESSABLE_ENTITY)
     }

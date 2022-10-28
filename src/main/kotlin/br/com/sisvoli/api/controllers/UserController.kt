@@ -12,11 +12,10 @@ import br.com.sisvoli.util.getMillisByMinute
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.util.Date
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -24,9 +23,10 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.Date
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
-import org.springframework.http.MediaType
-import org.springframework.web.bind.annotation.GetMapping
 
 @RestController
 @RequestMapping("/user")
@@ -51,7 +51,9 @@ class UserController(
 
             val accessToken = JWT.create()
                 .withSubject(userModel.username)
-                .withExpiresAt(Date(System.currentTimeMillis() + getMillisByMinute(CustomAuthenticationFilter.TEN_MINUTES)))
+                .withExpiresAt(
+                    Date(System.currentTimeMillis() + getMillisByMinute(CustomAuthenticationFilter.TEN_MINUTES))
+                )
                 .withIssuer(request.requestURL.toString())
                 .withClaim("roles", userModel.roleName)
                 .sign(algorithm)
