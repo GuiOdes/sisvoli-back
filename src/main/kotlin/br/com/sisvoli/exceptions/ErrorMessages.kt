@@ -92,5 +92,15 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.UNPROCESSABLE_ENTITY.value(),
         "PS-0016",
         "Invalid Request"
+    ),
+    PS_0019(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0019",
+        "Invalid refresh token"
+    ),
+    PS_0020(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0020",
+        "Token expired"
     )
 }

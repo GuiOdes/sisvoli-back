@@ -124,12 +124,16 @@ class UserServiceImpl(
     }
 
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = userRepository.findByUsername(username)
-        return User(user.username, user.password, listOf(SimpleGrantedAuthority(user.roleName)))
+        val user = userRepository.findByCpf(username)
+        return User(user.cpf, user.password, listOf(SimpleGrantedAuthority(user.roleName)))
     }
 
     override fun emailAvailable(email: String): Boolean {
         return !userRepository.existsByEmail(email)
+    }
+
+    override fun findByCpf(cpf: String): UserModel {
+        return userRepository.findByCpf(cpf)
     }
 
     private fun isCpf(cpf: String) = cpf.isCpf()
