@@ -42,4 +42,12 @@ class UserRepositoryImpl(
     override fun findRecoverTokenByUserId(userId: UUID): PasswordRecoveryTokenModel? {
         return passwordRecoveryTokenSpringDataRepository.findByUserEntityId(userId)?.toPasswordRecoveryTokenModel()
     }
+
+    override fun existsByCpf(cpf: String): Boolean {
+        return userSpringDataRepository.existsByCpf(cpf)
+    }
+
+    override fun existsByUsername(username: String): Boolean {
+        return userSpringDataRepository.existsByUsername(username)
+    }
 }

@@ -179,6 +179,13 @@ class UserServiceImpl(
         return userRepository.findByCpf(cpf)
     }
 
+    override fun cpfAvailable(cpf: String): Boolean {
+        return !userRepository.existsByCpf(cpf)
+    }
+
+    override fun usernameAvailable(username: String): Boolean {
+        return !userRepository.existsByUsername(username)
+    }
     private fun isCpf(cpf: String) = cpf.isCpf()
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)

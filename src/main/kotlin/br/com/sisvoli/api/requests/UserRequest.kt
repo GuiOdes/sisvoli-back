@@ -2,7 +2,9 @@ package br.com.sisvoli.api.requests
 
 import br.com.sisvoli.enums.Gender
 import br.com.sisvoli.models.UserModel
+import br.com.sisvoli.validation.CpfAvailable
 import br.com.sisvoli.validation.EmailAvailable
+import br.com.sisvoli.validation.UsernameAvailable
 import java.time.LocalDate
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotEmpty
@@ -19,11 +21,13 @@ data class UserRequest(
     @field: NotEmpty(message = "O Password precisa ser informado")
     val password: String,
     @field: NotEmpty(message = "O CPF precisa ser informado")
+    @CpfAvailable
     val cpf: String,
     val phoneNumber: String? = null,
     @field: Past
     val birthDate: LocalDate,
     @field: NotEmpty(message = "O Username precisa ser informado")
+    @UsernameAvailable
     val username: String
 ) {
     fun toUserModel(roleName: String): UserModel {

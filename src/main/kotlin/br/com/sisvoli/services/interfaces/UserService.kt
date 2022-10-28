@@ -19,4 +19,6 @@ interface UserService {
     fun emailAvailable(email: String): Boolean
     fun findByCpf(cpf: String): UserModel
     fun doRefreshToken(authorizationHeader: String?, request: HttpServletRequest, response: HttpServletResponse)
+    fun cpfAvailable(cpf: String): Boolean
+    fun usernameAvailable(username: String): Boolean
 }
