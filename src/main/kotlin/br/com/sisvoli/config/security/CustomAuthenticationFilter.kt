@@ -41,14 +41,14 @@ class CustomAuthenticationFilter(
             .withSubject(user.username)
             .withExpiresAt(Date(System.currentTimeMillis() + getMillisByMinute(TEN_MINUTES)))
             .withIssuer(request.requestURL.toString())
-            .withClaim("roles", user.authorities.map { it.authority })
+            .withClaim("role", getAuthority(user))
             .sign(algorithm)
 
         val refreshToken = JWT.create()
             .withSubject(user.username)
             .withExpiresAt(Date(System.currentTimeMillis() + getMillisByMinute(THIRD_MINUTES)))
             .withIssuer(request.requestURL.toString())
-            .withClaim("roles", user.authorities.map { it.authority })
+            .withClaim("role", getAuthority(user))
             .sign(algorithm)
 
         val responseAttributes = mutableMapOf<String, String>()
@@ -58,6 +58,9 @@ class CustomAuthenticationFilter(
         response.contentType = APPLICATION_JSON_VALUE
         ObjectMapper().writeValue(response.outputStream, responseAttributes)
     }
+
+    private fun getAuthority(user: User): String? =
+        user.authorities.first().authority
 
     companion object {
         const val TEN_MINUTES = 10

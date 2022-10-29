@@ -48,8 +48,8 @@ class UserServiceImpl(
         request: HttpServletRequest,
         response: HttpServletResponse
     ) {
-        if (authorizationHeader.isNullOrBlank().not() && authorizationHeader!!.startsWith("Bearer ")) {
-            val refreshToken = authorizationHeader.substring("Bearer ".length)
+        if (isValidAuthorizationHeader(authorizationHeader)) {
+            val refreshToken = authorizationHeader!!.substring("Bearer ".length)
             val algorithm = Algorithm.HMAC256("secret".toByteArray())
             val verifier = JWT.require(algorithm).build()
             val decodedJWT = verifier.verify(refreshToken)
@@ -70,18 +70,21 @@ class UserServiceImpl(
         }
     }
 
+    private fun isValidAuthorizationHeader(authorizationHeader: String?) =
+        authorizationHeader.isNullOrBlank().not() && authorizationHeader!!.startsWith("Bearer ")
+
     private fun generateToken(
         userModel: UserModel,
         request: HttpServletRequest,
         algorithm: Algorithm?,
         minutesExpiration: Int
     ) = JWT.create()
-        .withSubject(userModel.username)
+        .withSubject(userModel.cpf)
         .withExpiresAt(
             Date(System.currentTimeMillis() + getMillisByMinute(minutesExpiration))
         )
         .withIssuer(request.requestURL.toString())
-        .withClaim("roles", userModel.roleName)
+        .withClaim("role", userModel.roleName)
         .sign(algorithm)
 
     override fun save(userRequest: UserRequest): UserResponse {
