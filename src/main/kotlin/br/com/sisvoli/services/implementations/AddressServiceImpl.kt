@@ -12,8 +12,8 @@ class AddressServiceImpl(
     private val addressRepository: AddressRepository,
     private val userService: UserService
 ) : AddressService {
-    override fun save(addressRequest: AddressRequest, username: String): AddressModel {
-        val userModel = userService.findByUsername(username)
+    override fun save(addressRequest: AddressRequest, userDocument: String): AddressModel {
+        val userModel = userService.findByCpf(userDocument)
         return addressRepository.save(addressRequest.toAddressModel(userModel.id!!))
     }
 }

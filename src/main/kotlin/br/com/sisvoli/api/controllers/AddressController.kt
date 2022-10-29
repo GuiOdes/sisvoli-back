@@ -17,7 +17,7 @@ class AddressController(
 ) {
     @PostMapping
     fun save(@RequestBody addressModel: AddressRequest): AddressModel {
-        val usernameRequest = jwtUtil.getUsername()
-        return addressService.save(addressModel, usernameRequest)
+        val userDocumentRequest = jwtUtil.getUserDocument()
+        return addressService.save(addressModel, userDocumentRequest)
     }
 }

@@ -14,8 +14,8 @@ class PollServiceImpl(
     private val pollRepository: PollRepository,
     private val userService: UserService
 ) : PollService {
-    override fun save(pollRequest: PollRequest, username: String): PollModel {
-        val userId = userService.findByUsername(username).id
+    override fun save(pollRequest: PollRequest, userDocument: String): PollModel {
+        val userId = userService.findByCpf(userDocument).id
         val pollStatus = if (pollRequest.startDate > LocalDateTime.now()) {
             PollStatus.SCHEDULED
         } else {
@@ -29,8 +29,8 @@ class PollServiceImpl(
         return pollRepository.findAll()
     }
 
-    override fun findAllByLoggedUser(username: String): List<PollModel> {
-        val userID = userService.findByUsername(username).id
+    override fun findAllByLoggedUser(userDocument: String): List<PollModel> {
+        val userID = userService.findByCpf(userDocument).id
         return pollRepository.findAllByLoggedUser(userID!!)
     }
 }

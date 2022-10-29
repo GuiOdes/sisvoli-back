@@ -20,8 +20,8 @@ class PollController(
 ) {
     @PostMapping("/new")
     fun save(@RequestBody pollRequest: PollRequest): ResponseEntity<PollModel> {
-        val username = jwtUtil.getUsername()
-        return ResponseEntity(pollService.save(pollRequest, username), HttpStatus.CREATED)
+        val userDocument = jwtUtil.getUserDocument()
+        return ResponseEntity(pollService.save(pollRequest, userDocument), HttpStatus.CREATED)
     }
     @GetMapping("/list")
     fun findAll(): List<PollModel> {
@@ -30,7 +30,7 @@ class PollController(
 
     @GetMapping("/list/my")
     fun findAllByLoggedUser(): List<PollModel> {
-        val username = jwtUtil.getUsername()
-        return pollService.findAllByLoggedUser(username)
+        val userDocument = jwtUtil.getUserDocument()
+        return pollService.findAllByLoggedUser(userDocument)
     }
 }

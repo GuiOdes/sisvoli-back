@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 interface UserService {
     fun save(userRequest: UserRequest): UserResponse
     fun findByUsername(username: String): UserModel
-    fun updateByUsername(userUpdateRequest: UserUpdateRequest, username: String): UserResponse
+    fun updateByUsername(userUpdateRequest: UserUpdateRequest, userDocument: String): UserResponse
     fun requestPasswordRecoverByCpf(userCpf: String): UUID
     fun tokenRecoverValidation(passwordRecoverRequest: PasswordRecoverRequest): Boolean
     fun updatePassword(passwordRecoverRequest: PasswordRecoverRequest)

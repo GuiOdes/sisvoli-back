@@ -105,8 +105,8 @@ class UserServiceImpl(
         return userRepository.findByUsername(username)
     }
 
-    override fun updateByUsername(userUpdateRequest: UserUpdateRequest, username: String): UserResponse {
-        val userModel = findByUsername(username)
+    override fun updateByUsername(userUpdateRequest: UserUpdateRequest, userDocument: String): UserResponse {
+        val userModel = findByCpf(userDocument)
         val userToSave = userModel.copy(
             name = userUpdateRequest.name ?: userModel.name,
             gender = userUpdateRequest.gender ?: userModel.gender,
