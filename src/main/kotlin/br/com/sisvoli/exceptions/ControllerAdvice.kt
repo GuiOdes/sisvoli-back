@@ -4,6 +4,7 @@ import br.com.sisvoli.api.responses.ErrorResponse
 import br.com.sisvoli.api.responses.FieldErrorResponse
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
+import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
 import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
@@ -91,5 +92,9 @@ class ControllerAdvice {
     @ExceptionHandler(TokenExpiredException::class)
     fun tokenExpiredException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0020).responseEntity()
+    }
+    @ExceptionHandler(InvalidPollCancelRequest::class)
+    fun invalidPollCancelRequest(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0021).responseEntity()
     }
 }

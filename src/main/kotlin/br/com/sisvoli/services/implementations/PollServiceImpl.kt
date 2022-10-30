@@ -3,6 +3,7 @@ package br.com.sisvoli.services.implementations
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
+import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.services.interfaces.UserService
@@ -50,6 +51,10 @@ class PollServiceImpl(
         return pollRepository.findAllByStatus(status)
     }
 
+    override fun findById(pollId: UUID): PollModel {
+        return pollRepository.findById(pollId)
+    }
+
     override fun changeStatusById(id: UUID, status: PollStatus): PollModel {
         logger.info { "Starting to change status of poll #$id to ${status.name}..." }
         val pollModel = pollRepository.findById(id)
@@ -69,5 +74,15 @@ class PollServiceImpl(
     companion object {
         val logger = KotlinLogging.logger { }
         val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    }
+
+    override fun cancelById(pollId: UUID) {
+        val pollModel = pollRepository.findById(pollId)
+
+        if (pollModel.status != PollStatus.SCHEDULED) {
+            throw InvalidPollCancelRequest()
+        }
+
+        pollRepository.save(pollModel.copy(status = PollStatus.CANCELED))
     }
 }

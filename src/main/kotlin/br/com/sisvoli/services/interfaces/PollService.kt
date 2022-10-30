@@ -10,7 +10,9 @@ interface PollService {
     fun findAll(): List<PollModel>
     fun findAllByLoggedUser(userDocument: String): List<PollModel>
     fun findAllByStatus(status: PollStatus): List<PollModel>
+    fun findById(pollId: UUID): PollModel
     fun changeStatusById(id: UUID, status: PollStatus): PollModel
     fun findAllScheduledFromToday(): List<PollModel>
     fun findAllPollsToEndToday(): List<PollModel>
+    fun cancelById(pollId: UUID)
 }
