@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/poll")
@@ -22,7 +23,7 @@ class PollController(
     val pollService: PollService
 ) {
     @PostMapping("/new")
-    fun save(@RequestBody pollRequest: PollRequest): ResponseEntity<PollModel> {
+    fun save(@RequestBody @Valid pollRequest: PollRequest): ResponseEntity<PollModel> {
         val userDocument = jwtUtil.getUserDocument()
         return ResponseEntity(pollService.save(pollRequest, userDocument), HttpStatus.CREATED)
     }

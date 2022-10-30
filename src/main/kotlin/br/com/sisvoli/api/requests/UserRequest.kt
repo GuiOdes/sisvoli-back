@@ -5,28 +5,29 @@ import br.com.sisvoli.models.UserModel
 import br.com.sisvoli.validation.CpfAvailable
 import br.com.sisvoli.validation.EmailAvailable
 import br.com.sisvoli.validation.UsernameAvailable
+import org.hibernate.validator.constraints.br.CPF
 import java.time.LocalDate
 import javax.validation.constraints.Email
-import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.Past
 
 data class UserRequest(
-    @field: NotEmpty(message = "O Nome precisa ser informado")
+    @field: NotBlank(message = "O Nome precisa ser informado")
     val name: String,
-    @field: NotEmpty(message = "O Genero precisa ser informado ")
+    @field: NotBlank(message = "O Genero precisa ser informado ")
     val gender: String,
     @field: Email(message = "E-mail deve ser válido")
     @EmailAvailable
     val email: String,
-    @field: NotEmpty(message = "O Password precisa ser informado")
+    @field: NotBlank(message = "O Password precisa ser informado")
     val password: String,
-    @field: NotEmpty(message = "O CPF precisa ser informado")
+    @field: CPF(message = "O CPF precisa ser valido")
     @CpfAvailable
     val cpf: String,
     val phoneNumber: String? = null,
-    @field: Past
+    @field: Past(message = "A data não pode ser futura")
     val birthDate: LocalDate,
-    @field: NotEmpty(message = "O Username precisa ser informado")
+    @field: NotBlank(message = "O Username precisa ser informado")
     @UsernameAvailable
     val username: String
 ) {
