@@ -5,7 +5,7 @@ import br.com.sisvoli.enums.PollType
 import java.time.LocalDateTime
 import java.util.UUID
 
-class PollModel(
+data class PollModel(
     val id: UUID? = null,
     val title: String,
     val description: String,
