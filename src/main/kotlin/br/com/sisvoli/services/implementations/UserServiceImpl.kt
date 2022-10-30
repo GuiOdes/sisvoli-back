@@ -90,7 +90,6 @@ class UserServiceImpl(
                 text = "Olá, ${userModel.username}! O seu token para recuperação de senha é $token."
             )
         )
-
         return userModel.id
     }
 
