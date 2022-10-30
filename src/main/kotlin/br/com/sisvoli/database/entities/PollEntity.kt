@@ -10,6 +10,8 @@ import java.time.LocalDateTime
 import java.util.UUID
 import javax.persistence.Column
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
@@ -34,6 +36,7 @@ class PollEntity(
     val description: String,
 
     @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     val type: PollType,
 
     @Column(name = "creation_date", nullable = false, length = 255)
@@ -51,6 +54,7 @@ class PollEntity(
     val endDate: LocalDateTime,
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     val status: PollStatus,
 
     @ManyToOne
