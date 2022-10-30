@@ -102,5 +102,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.FORBIDDEN.value(),
         "PS-0020",
         "Token expired"
+    ),
+    PS_0021(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0021",
+        "Somente enquetes agendadas poderão ser canceladas"
     )
 }
