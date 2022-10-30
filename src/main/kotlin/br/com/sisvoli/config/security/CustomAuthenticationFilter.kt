@@ -1,5 +1,6 @@
 package br.com.sisvoli.config.security
 
+import br.com.sisvoli.util.getMillisByMinute
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -19,10 +20,10 @@ class CustomAuthenticationFilter(
 ) : UsernamePasswordAuthenticationFilter() {
 
     override fun attemptAuthentication(request: HttpServletRequest, response: HttpServletResponse): Authentication {
-        val username = request.getParameter("username")
+        val userDocument = request.getParameter("userDocument")
         val password = request.getParameter("password")
 
-        val authenticationToken = UsernamePasswordAuthenticationToken(username, password)
+        val authenticationToken = UsernamePasswordAuthenticationToken(userDocument, password)
 
         return customAuthenticationManager.authenticate(authenticationToken)
     }
@@ -35,34 +36,34 @@ class CustomAuthenticationFilter(
     ) {
         val user: User = authentication.principal as User
         val algorithm = Algorithm.HMAC256("secret".toByteArray())
+
         val accessToken = JWT.create()
             .withSubject(user.username)
             .withExpiresAt(Date(System.currentTimeMillis() + getMillisByMinute(TEN_MINUTES)))
             .withIssuer(request.requestURL.toString())
-            .withClaim("roles", user.authorities.map { it.authority })
+            .withClaim("role", getAuthority(user))
             .sign(algorithm)
 
         val refreshToken = JWT.create()
             .withSubject(user.username)
             .withExpiresAt(Date(System.currentTimeMillis() + getMillisByMinute(THIRD_MINUTES)))
             .withIssuer(request.requestURL.toString())
-            .withClaim("roles", user.authorities.map { it.authority })
+            .withClaim("role", getAuthority(user))
             .sign(algorithm)
 
-        val tokens = mutableMapOf<String, String>()
-        tokens.put("access_token", accessToken)
-        tokens.put("refresh_token", refreshToken)
-        tokens.put("userName", user.username)
+        val responseAttributes = mutableMapOf<String, String>()
+        responseAttributes.put("access_token", accessToken)
+        responseAttributes.put("refresh_token", refreshToken)
+        responseAttributes.put("userCpf", user.username)
         response.contentType = APPLICATION_JSON_VALUE
-        ObjectMapper().writeValue(response.outputStream, tokens)
+        ObjectMapper().writeValue(response.outputStream, responseAttributes)
     }
 
-    private fun getMillisByMinute(minutes: Int) = minutes * ONE_HOUR_IN_MINUTES * ONE_SECOND_IN_MILLISECONDS
+    private fun getAuthority(user: User): String? =
+        user.authorities.first().authority
 
     companion object {
         const val TEN_MINUTES = 10
         const val THIRD_MINUTES = 30
-        const val ONE_HOUR_IN_MINUTES = 60
-        const val ONE_SECOND_IN_MILLISECONDS = 1000
     }
 }

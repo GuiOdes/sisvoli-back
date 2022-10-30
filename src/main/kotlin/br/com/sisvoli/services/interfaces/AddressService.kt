@@ -4,5 +4,5 @@ import br.com.sisvoli.api.requests.AddressRequest
 import br.com.sisvoli.models.AddressModel
 
 interface AddressService {
-    fun save(addressRequest: AddressRequest, username: String): AddressModel
+    fun save(addressRequest: AddressRequest, userDocument: String): AddressModel
 }

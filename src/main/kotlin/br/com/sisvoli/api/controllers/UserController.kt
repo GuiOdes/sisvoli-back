@@ -8,13 +8,17 @@ import br.com.sisvoli.services.interfaces.UserService
 import br.com.sisvoli.util.JWTUtil
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.validation.Valid
 
 @RestController
@@ -23,14 +27,21 @@ class UserController(
     val userService: UserService,
     val jwtUtil: JWTUtil
 ) {
+    @GetMapping("/refresh-token")
+    fun refreshToken(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        @RequestHeader("Authorization") authorizationHeader: String?
+    ) = userService.doRefreshToken(authorizationHeader, request, response)
+
     @PostMapping("/new")
     fun save(@RequestBody @Valid userModel: UserRequest): ResponseEntity<UserResponse> {
         return ResponseEntity(userService.save(userModel), HttpStatus.CREATED)
     }
     @PutMapping("/update")
     fun update(@RequestBody userUpdateRequest: UserUpdateRequest): ResponseEntity<UserResponse> {
-        val username = jwtUtil.getUsername()
-        return ResponseEntity(userService.updateByUsername(userUpdateRequest, username), HttpStatus.OK)
+        val userDocument = jwtUtil.getUserDocument()
+        return ResponseEntity(userService.updateByUsername(userUpdateRequest, userDocument), HttpStatus.OK)
     }
 
     @PatchMapping("/password-recover/{cpf}")

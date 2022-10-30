@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 class JWTUtil {
     private fun getContext() = SecurityContextHolder.getContext()
 
-    fun getUsername(): String {
+    fun getUserDocument(): String {
         return getContext().authentication.principal as String
     }
 }

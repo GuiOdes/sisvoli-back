@@ -4,10 +4,13 @@ import br.com.sisvoli.api.responses.ErrorResponse
 import br.com.sisvoli.api.responses.FieldErrorResponse
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
+import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
+import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
 import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
+import com.auth0.jwt.exceptions.TokenExpiredException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -81,5 +84,17 @@ class ControllerAdvice {
             ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage ?: "Invalid") }
         )
         return ResponseEntity(erro, HttpStatus.BAD_REQUEST)
+    }
+    @ExceptionHandler(InvalidRefreshTokenException::class)
+    fun invalidRefreshTokenException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0019).responseEntity()
+    }
+    @ExceptionHandler(TokenExpiredException::class)
+    fun tokenExpiredException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0020).responseEntity()
+    }
+    @ExceptionHandler(InvalidPollCancelRequest::class)
+    fun invalidPollCancelRequest(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0021).responseEntity()
     }
 }
