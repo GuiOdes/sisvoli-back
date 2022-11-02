@@ -16,8 +16,7 @@ data class PollRequest(
     @field:Future(message = "A data precisa ser posterior a hoje")
     val startDate: LocalDateTime,
     @field:Future(message = "A data precisa ser posterior a hoje")
-    val endDate: LocalDateTime,
-    val optionsList: List<OptionRequest>? = null
+    val endDate: LocalDateTime
 ) {
     fun toPollModel(userID: UUID, pollStatus: PollStatus): PollModel {
         return PollModel(

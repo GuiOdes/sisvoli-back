@@ -12,6 +12,7 @@ import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
@@ -62,7 +63,7 @@ class PollEntity(
     @JoinColumn(name = "user_owner_id", nullable = false)
     val userOwner: UserEntity,
 
-    @OneToMany(mappedBy = "pollEntity")
+    @OneToMany(mappedBy = "pollEntity", fetch = FetchType.LAZY)
     val optionList: MutableList<OptionEntity>? = null
 
 ) {
@@ -77,7 +78,8 @@ class PollEntity(
             startDate = startDate,
             endDate = endDate,
             status = status,
-            userOwnerId = userOwner.id!!
+            userOwnerId = userOwner.id!!,
+            optionList = optionList?.map { it.name }
         )
     }
 

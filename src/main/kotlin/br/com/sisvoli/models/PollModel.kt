@@ -1,5 +1,6 @@
 package br.com.sisvoli.models
 
+import br.com.sisvoli.database.entities.OptionEntity
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.enums.PollType
 import java.time.LocalDateTime
@@ -15,5 +16,6 @@ data class PollModel(
     val startDate: LocalDateTime,
     val endDate: LocalDateTime,
     val status: PollStatus,
-    val userOwnerId: UUID
+    val userOwnerId: UUID,
+    val optionList: List<String>? = null
 )
