@@ -127,5 +127,15 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.FORBIDDEN.value(),
         "PS-0025",
         "Não é possivel adicionar opções em enquetes não agendadas"
+    ),
+    PS_0026(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0026",
+        "Não é possivel alterar uma enquete que não esteja agendada"
+    ),
+    PS_0027(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0027",
+        "Somente quem criou a enquete pode edita-la"
     )
 }

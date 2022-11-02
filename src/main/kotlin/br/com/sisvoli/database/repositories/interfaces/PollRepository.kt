@@ -7,7 +7,7 @@ import java.util.UUID
 interface PollRepository {
     fun save(pollModel: PollModel): PollModel
     fun findAll(): List<PollModel>
-    fun findAllByLoggedUser(userID: UUID): List<PollModel>
+    fun findAllByLoggedUser(userOwnerId: UUID): List<PollModel>
     fun findAllByStatus(status: PollStatus): List<PollModel>
     fun findById(id: UUID): PollModel
     fun findAllScheduledFromToday(): List<PollModel>

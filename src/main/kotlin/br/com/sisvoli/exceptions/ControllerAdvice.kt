@@ -5,10 +5,12 @@ import br.com.sisvoli.api.responses.FieldErrorResponse
 import br.com.sisvoli.exceptions.conflict.OptionAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
+import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
+import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
 import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
@@ -116,5 +118,13 @@ class ControllerAdvice {
     @ExceptionHandler(InvalidPollNotScheduledException::class)
     fun invalidPollNotScheduledException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0025).responseEntity()
+    }
+    @ExceptionHandler(InvalidPollNotScheduledUpdateException::class)
+    fun invalidPollNotScheduledUpdateException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0026).responseEntity()
+    }
+    @ExceptionHandler(UserLoggedDidNotUpdateThePollException::class)
+    fun userLoggedDidNotUpdateThePollException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0027).responseEntity()
     }
 }
