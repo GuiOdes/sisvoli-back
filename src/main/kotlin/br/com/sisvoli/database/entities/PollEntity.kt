@@ -16,6 +16,7 @@ import javax.persistence.GeneratedValue
 import javax.persistence.Id
 import javax.persistence.JoinColumn
 import javax.persistence.ManyToOne
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -59,7 +60,10 @@ class PollEntity(
 
     @ManyToOne
     @JoinColumn(name = "user_owner_id", nullable = false)
-    val userOwner: UserEntity
+    val userOwner: UserEntity,
+
+    @OneToMany(mappedBy = "pollEntity")
+    val optionList: MutableList<OptionEntity>? = null
 
 ) {
     fun toPollModel(): PollModel {

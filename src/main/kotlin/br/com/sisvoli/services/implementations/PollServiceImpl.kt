@@ -21,18 +21,13 @@ class PollServiceImpl(
     private val userService: UserService
 ) : PollService {
     override fun save(pollRequest: PollRequest, userDocument: String): PollModel {
-        if (endDateLargerstartDate(pollRequest.endDate, pollRequest.startDate)) {
+        if (isEndDateLargerStartDate(pollRequest.endDate, pollRequest.startDate)) {
             val userId = userService.findByCpf(userDocument).id
 
             logger.info { "Starting to save a new poll of user $userId" }
 
-            val pollStatus = if (pollRequest.startDate > LocalDateTime.now()) {
-                PollStatus.SCHEDULED
-            } else {
-                PollStatus.PROGRESS
-            }
-            val pollModel = pollRequest.toPollModel(userId!!, pollStatus)
-            return pollRepository.save(pollModel)
+            val pollStatus = PollStatus.SCHEDULED
+            return pollRepository.save(pollRequest.toPollModel(userId!!, pollStatus))
         } else {
             throw InvalidEndDateException()
         }
@@ -90,7 +85,8 @@ class PollServiceImpl(
 
         pollRepository.save(pollModel.copy(status = PollStatus.CANCELED))
     }
-    private fun endDateLargerstartDate(endDate: LocalDateTime, startDate: LocalDateTime): Boolean {
+
+    private fun isEndDateLargerStartDate(endDate: LocalDateTime, startDate: LocalDateTime): Boolean {
         return endDate > startDate
     }
 }

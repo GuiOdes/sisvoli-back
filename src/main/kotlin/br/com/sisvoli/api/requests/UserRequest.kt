@@ -2,9 +2,9 @@ package br.com.sisvoli.api.requests
 
 import br.com.sisvoli.enums.Gender
 import br.com.sisvoli.models.UserModel
-import br.com.sisvoli.validation.CpfAvailable
-import br.com.sisvoli.validation.EmailAvailable
-import br.com.sisvoli.validation.UsernameAvailable
+import br.com.sisvoli.validation.annotation.CpfAvailable
+import br.com.sisvoli.validation.annotation.EmailAvailable
+import br.com.sisvoli.validation.annotation.UsernameAvailable
 import org.hibernate.validator.constraints.br.CPF
 import java.time.LocalDate
 import javax.validation.constraints.Email
