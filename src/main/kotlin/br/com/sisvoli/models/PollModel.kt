@@ -1,6 +1,5 @@
 package br.com.sisvoli.models
 
-import br.com.sisvoli.database.entities.OptionEntity
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.enums.PollType
 import java.time.LocalDateTime

@@ -32,4 +32,9 @@ class OptionRepositoryImpl(
     override fun existsByNameAndPollEntityId(name: String, pollId: UUID): Boolean {
         return optionSpringDataRepository.existsByNameAndPollEntityId(name, pollId)
     }
+
+    override fun findAllByPollId(pollId: UUID): List<OptionModel> {
+        return optionSpringDataRepository.findAllByPollEntityId(pollId)
+            .map { it.toOptionModel() }
+    }
 }

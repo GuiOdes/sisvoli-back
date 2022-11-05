@@ -6,4 +6,5 @@ import java.util.UUID
 
 interface OptionSpringDataRepository : JpaRepository<OptionEntity, UUID> {
     fun existsByNameAndPollEntityId(name: String, id: UUID): Boolean
+    fun findAllByPollEntityId(pollId: UUID): List<OptionEntity>
 }
