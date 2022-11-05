@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import java.util.UUID
 
 interface PollSpringDataRepository : JpaRepository<PollEntity, UUID> {
-    fun findAllByUserOwnerId(userID: UUID): List<PollEntity>
+    fun findAllByUserOwnerId(userOwnerId: UUID): List<PollEntity>
     fun findAllByStatus(status: PollStatus): List<PollEntity>
     @Query(
         value = "SELECT * FROM tb_poll tp WHERE DATE(tp.start_date) = CURRENT_DATE AND tp.status = 'SCHEDULED';",
