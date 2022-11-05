@@ -1,6 +1,7 @@
-package br.com.sisvoli.validation
+package br.com.sisvoli.validation.validator
 
 import br.com.sisvoli.services.interfaces.UserService
+import br.com.sisvoli.validation.annotation.CpfAvailable
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 

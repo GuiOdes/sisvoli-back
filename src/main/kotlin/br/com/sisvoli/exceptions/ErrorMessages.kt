@@ -78,6 +78,11 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         "PS-0015",
         "CPF inválido"
     ),
+    PS_0016(
+        HttpStatus.BAD_REQUEST.value(),
+        "PS-0016",
+        "Invalid Request"
+    ),
     PS_0017(
         HttpStatus.NOT_FOUND.value(),
         "PS-0017",
@@ -87,11 +92,6 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.BAD_REQUEST.value(),
         "PS-0018",
         "Token inválido"
-    ),
-    PS_0016(
-        HttpStatus.BAD_REQUEST.value(),
-        "PS-0016",
-        "Invalid Request"
     ),
     PS_0019(
         HttpStatus.FORBIDDEN.value(),
@@ -107,5 +107,35 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.FORBIDDEN.value(),
         "PS-0021",
         "Somente enquetes agendadas poderão ser canceladas"
+    ),
+    PS_0022(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0022",
+        "A Data de finalização da enquete precisa ser maior que a data de inicialização da enquete"
+    ),
+    PS_0023(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0023",
+        "Somente quem criou a enquete pode criar as opções de votação"
+    ),
+    PS_0024(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0024",
+        "Essa opção já está criada nessa enquete"
+    ),
+    PS_0025(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0025",
+        "Não é possivel adicionar opções em enquetes não agendadas"
+    ),
+    PS_0026(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0026",
+        "Não é possivel alterar uma enquete que não esteja agendada"
+    ),
+    PS_0027(
+        HttpStatus.FORBIDDEN.value(),
+        "PS-0027",
+        "Somente quem criou a enquete pode edita-la"
     )
 }

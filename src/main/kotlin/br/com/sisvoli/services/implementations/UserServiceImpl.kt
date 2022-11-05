@@ -1,6 +1,5 @@
 package br.com.sisvoli.services.implementations
 
-import br.com.colman.simplecpfvalidator.isCpf
 import br.com.sisvoli.api.requests.MailRequest
 import br.com.sisvoli.api.requests.PasswordRecoverRequest
 import br.com.sisvoli.api.requests.UserRequest
@@ -9,7 +8,6 @@ import br.com.sisvoli.api.responses.UserResponse
 import br.com.sisvoli.database.repositories.interfaces.UserRepository
 import br.com.sisvoli.enums.RoleEnum
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
-import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.models.UserModel
@@ -88,17 +86,13 @@ class UserServiceImpl(
         .sign(algorithm)
 
     override fun save(userRequest: UserRequest): UserResponse {
-        return if (isCpf(userRequest.cpf)) {
-            val userModel = userRequest.toUserModel(RoleEnum.DEFAULT.name).copy(
-                password = encodePassword(userRequest.password),
-                cpf = userRequest.cpf
-                    .replace("-", "")
-                    .replace(".", "")
-            )
-            userRepository.save(userModel).toUserResponse()
-        } else {
-            throw InvalidCPFException()
-        }
+        val userModel = userRequest.toUserModel(RoleEnum.DEFAULT.name).copy(
+            password = encodePassword(userRequest.password),
+            cpf = userRequest.cpf
+                .replace("-", "")
+                .replace(".", "")
+        )
+        return userRepository.save(userModel).toUserResponse()
     }
 
     override fun findByUsername(username: String): UserModel {
@@ -143,7 +137,6 @@ class UserServiceImpl(
                 text = "Olá, ${userModel.username}! O seu token para recuperação de senha é $token."
             )
         )
-
         return userModel.id
     }
 
@@ -196,8 +189,6 @@ class UserServiceImpl(
     override fun existsByUsername(username: String): Boolean {
         return !userRepository.existsByUsername(username)
     }
-
-    private fun isCpf(cpf: String) = cpf.isCpf()
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)
 

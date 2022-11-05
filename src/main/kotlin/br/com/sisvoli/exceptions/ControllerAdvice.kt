@@ -2,9 +2,15 @@ package br.com.sisvoli.exceptions
 
 import br.com.sisvoli.api.responses.ErrorResponse
 import br.com.sisvoli.api.responses.FieldErrorResponse
+import br.com.sisvoli.exceptions.conflict.OptionAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
+import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
+import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
+import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
+import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
+import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
 import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
@@ -77,13 +83,13 @@ class ControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleMethodArgumentNotValidException
     (ex: MethodArgumentNotValidException, request: WebRequest): ResponseEntity<ErrorResponse> {
-        val erro = ErrorResponse(
+        val error = ErrorResponse(
             ErrorMessages.PS_0016.httpCode,
             ErrorMessages.PS_0016.message,
             ErrorMessages.PS_0016.code,
             ex.bindingResult.fieldErrors.map { FieldErrorResponse(it.field, it.defaultMessage ?: "Invalid") }
         )
-        return ResponseEntity(erro, HttpStatus.BAD_REQUEST)
+        return ResponseEntity(error, HttpStatus.BAD_REQUEST)
     }
     @ExceptionHandler(InvalidRefreshTokenException::class)
     fun invalidRefreshTokenException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
@@ -96,5 +102,29 @@ class ControllerAdvice {
     @ExceptionHandler(InvalidPollCancelRequest::class)
     fun invalidPollCancelRequest(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0021).responseEntity()
+    }
+    @ExceptionHandler(InvalidEndDateException::class)
+    fun invalidEndDataException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0022).responseEntity()
+    }
+    @ExceptionHandler(UserLoggedDidNotCreatedThePollException::class)
+    fun invalidUserLoggedDidNotCreatAPoll(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0023).responseEntity()
+    }
+    @ExceptionHandler(OptionAlreadyExistsException::class)
+    fun optionAlreadyExistsException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0024).responseEntity()
+    }
+    @ExceptionHandler(InvalidPollNotScheduledException::class)
+    fun invalidPollNotScheduledException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0025).responseEntity()
+    }
+    @ExceptionHandler(InvalidPollNotScheduledUpdateException::class)
+    fun invalidPollNotScheduledUpdateException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0026).responseEntity()
+    }
+    @ExceptionHandler(UserLoggedDidNotUpdateThePollException::class)
+    fun userLoggedDidNotUpdateThePollException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0027).responseEntity()
     }
 }

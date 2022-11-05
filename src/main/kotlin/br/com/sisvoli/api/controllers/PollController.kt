@@ -1,6 +1,7 @@
 package br.com.sisvoli.api.controllers
 
 import br.com.sisvoli.api.requests.PollRequest
+import br.com.sisvoli.api.requests.PollUpdateRequest
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.util.JWTUtil
@@ -10,10 +11,12 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.util.UUID
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/poll")
@@ -22,7 +25,7 @@ class PollController(
     val pollService: PollService
 ) {
     @PostMapping("/new")
-    fun save(@RequestBody pollRequest: PollRequest): ResponseEntity<PollModel> {
+    fun save(@RequestBody @Valid pollRequest: PollRequest): ResponseEntity<PollModel> {
         val userDocument = jwtUtil.getUserDocument()
         return ResponseEntity(pollService.save(pollRequest, userDocument), HttpStatus.CREATED)
     }
@@ -42,5 +45,12 @@ class PollController(
     @PatchMapping("/cancel/{pollId}")
     fun cancelById(@PathVariable pollId: UUID) {
         pollService.cancelById(pollId)
+    }
+    @PutMapping("/put/{pollId}")
+    fun update(@PathVariable pollId:UUID,
+                @RequestBody pollUpdateRequest: PollUpdateRequest):
+    ResponseEntity<PollModel>{
+        val userDocument = jwtUtil.getUserDocument()
+        return ResponseEntity(pollService.update(pollId, userDocument, pollUpdateRequest), HttpStatus.NO_CONTENT)
     }
 }

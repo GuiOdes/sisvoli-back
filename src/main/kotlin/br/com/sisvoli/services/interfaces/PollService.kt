@@ -1,6 +1,7 @@
 package br.com.sisvoli.services.interfaces
 
 import br.com.sisvoli.api.requests.PollRequest
+import br.com.sisvoli.api.requests.PollUpdateRequest
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.models.PollModel
 import java.util.UUID
@@ -15,4 +16,5 @@ interface PollService {
     fun findAllScheduledFromToday(): List<PollModel>
     fun findAllPollsToEndToday(): List<PollModel>
     fun cancelById(pollId: UUID)
+    fun update(pollID: UUID, userDocument: String, pollUpdateRequest: PollUpdateRequest): PollModel
 }

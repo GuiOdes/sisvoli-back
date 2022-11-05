@@ -28,8 +28,8 @@ class PollRepositoryImpl(
         return pollSpringDataRepository.findAll().map { it.toPollModel() }
     }
 
-    override fun findAllByLoggedUser(userID: UUID): List<PollModel> {
-        return pollSpringDataRepository.findAllByUserOwnerId(userID).map { it.toPollModel() }
+    override fun findAllByLoggedUser(userOwnerId: UUID): List<PollModel> {
+        return pollSpringDataRepository.findAllByUserOwnerId(userOwnerId).map { it.toPollModel() }
     }
 
     override fun findAllByStatus(status: PollStatus): List<PollModel> {
