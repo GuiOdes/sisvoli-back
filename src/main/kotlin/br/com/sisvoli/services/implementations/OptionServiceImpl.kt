@@ -29,13 +29,17 @@ class OptionServiceImpl(
         if (userID != pollModel.userOwnerId) {
             throw UserLoggedDidNotCreatedThePollException()
         }
-        if (existsByNameAndPollEntityId(optionRequest.name, pollModel.id!!)) {
+        if (existsByNameAndPollId(optionRequest.name, pollModel.id!!)) {
             throw OptionAlreadyExistsException()
         }
         return optionRepository.save(optionRequest.toOptionModel(), pollModel.id)
     }
 
-    override fun existsByNameAndPollEntityId(name: String, id: UUID): Boolean {
-        return optionRepository.existsByNameAndPollEntityId(name, id)
+    override fun existsByNameAndPollId(name: String, pollId: UUID): Boolean {
+        return optionRepository.existsByNameAndPollEntityId(name, pollId)
+    }
+
+    override fun findAllByPollId(pollId: UUID): List<OptionModel> {
+        return optionRepository.findAllByPollId(pollId)
     }
 }
