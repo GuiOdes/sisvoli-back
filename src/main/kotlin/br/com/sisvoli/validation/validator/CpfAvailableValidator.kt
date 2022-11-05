@@ -10,6 +10,6 @@ class CpfAvailableValidator(private val userService: UserService) : ConstraintVa
         if (value.isNullOrEmpty()) {
             return false
         }
-        return userService.existsByCpf(value)
+        return !userService.existsByCpf(value)
     }
 }
