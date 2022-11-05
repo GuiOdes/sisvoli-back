@@ -6,6 +6,7 @@ import br.com.sisvoli.exceptions.conflict.OptionAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
+import br.com.sisvoli.exceptions.conflict.VoteAlreadyExistsException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
@@ -126,5 +127,9 @@ class ControllerAdvice {
     @ExceptionHandler(UserLoggedDidNotUpdateThePollException::class)
     fun userLoggedDidNotUpdateThePollException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0027).responseEntity()
+    }
+    @ExceptionHandler(VoteAlreadyExistsException::class)
+    fun voteAlreadyExistsException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0028).responseEntity()
     }
 }
