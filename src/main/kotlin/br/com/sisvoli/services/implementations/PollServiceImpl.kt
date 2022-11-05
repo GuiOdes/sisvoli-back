@@ -4,11 +4,9 @@ import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.api.requests.PollUpdateRequest
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
-import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
-import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
@@ -95,12 +93,12 @@ class PollServiceImpl(
         val userId = userService.findByCpf(userDocument).id
         val pollModel = pollRepository.findById(pollID)
         val pollToSave = pollModel.copy(
-            title = pollUpdateRequest.title?: pollModel.title,
-            description = pollUpdateRequest.description?: pollModel.description,
-            startDate = pollUpdateRequest.startDate?:pollModel.startDate,
-            endDate = pollUpdateRequest.endDate?:pollModel.endDate
+            title = pollUpdateRequest.title ?: pollModel.title,
+            description = pollUpdateRequest.description ?: pollModel.description,
+            startDate = pollUpdateRequest.startDate ?: pollModel.startDate,
+            endDate = pollUpdateRequest.endDate ?: pollModel.endDate
         )
-        if (!isEndDateLargerStartDate(pollToSave.endDate, pollToSave.startDate)){
+        if (!isEndDateLargerStartDate(pollToSave.endDate, pollToSave.startDate)) {
             throw InvalidEndDateException()
         }
         if (pollModel.status != PollStatus.SCHEDULED) {
@@ -110,7 +108,6 @@ class PollServiceImpl(
             throw UserLoggedDidNotUpdateThePollException()
         }
         return pollRepository.save(pollToSave)
-
     }
 
     private fun isEndDateLargerStartDate(endDate: LocalDateTime, startDate: LocalDateTime): Boolean {

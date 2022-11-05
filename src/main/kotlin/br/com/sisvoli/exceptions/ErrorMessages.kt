@@ -137,5 +137,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.FORBIDDEN.value(),
         "PS-0027",
         "Somente quem criou a enquete pode edita-la"
+    ),
+    PS_0028(
+        HttpStatus.CONFLICT.value(),
+        "PS-0028",
+        "Essa enquete já foi votada por esse usuário"
     )
 }
