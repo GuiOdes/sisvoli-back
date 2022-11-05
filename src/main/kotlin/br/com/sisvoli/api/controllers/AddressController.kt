@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.Valid
 
 @RestController
 @RequestMapping("/address")
@@ -16,7 +17,7 @@ class AddressController(
     val jwtUtil: JWTUtil
 ) {
     @PostMapping
-    fun save(@RequestBody addressModel: AddressRequest): AddressModel {
+    fun save(@RequestBody @Valid addressModel: AddressRequest): AddressModel {
         val userDocumentRequest = jwtUtil.getUserDocument()
         return addressService.save(addressModel, userDocumentRequest)
     }

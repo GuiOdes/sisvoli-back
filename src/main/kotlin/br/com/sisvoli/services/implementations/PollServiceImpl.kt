@@ -3,6 +3,7 @@ package br.com.sisvoli.services.implementations
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
+import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
@@ -20,17 +21,16 @@ class PollServiceImpl(
     private val userService: UserService
 ) : PollService {
     override fun save(pollRequest: PollRequest, userDocument: String): PollModel {
-        val userId = userService.findByCpf(userDocument).id
+        if (isEndDateLargerStartDate(pollRequest.endDate, pollRequest.startDate)) {
+            val userId = userService.findByCpf(userDocument).id
 
-        logger.info { "Starting to save a new poll of user $userId" }
+            logger.info { "Starting to save a new poll of user $userId" }
 
-        val pollStatus = if (pollRequest.startDate > LocalDateTime.now()) {
-            PollStatus.SCHEDULED
+            val pollStatus = PollStatus.SCHEDULED
+            return pollRepository.save(pollRequest.toPollModel(userId!!, pollStatus))
         } else {
-            PollStatus.PROGRESS
+            throw InvalidEndDateException()
         }
-        val pollModel = pollRequest.toPollModel(userId!!, pollStatus)
-        return pollRepository.save(pollModel)
     }
 
     override fun findAll(): List<PollModel> {
@@ -84,5 +84,9 @@ class PollServiceImpl(
         }
 
         pollRepository.save(pollModel.copy(status = PollStatus.CANCELED))
+    }
+
+    private fun isEndDateLargerStartDate(endDate: LocalDateTime, startDate: LocalDateTime): Boolean {
+        return endDate > startDate
     }
 }
