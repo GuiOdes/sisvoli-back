@@ -6,4 +6,5 @@ import java.util.UUID
 interface OptionRepository {
     fun save(optionModel: OptionModel, pollID: UUID): OptionModel
     fun existsByNameAndPollEntityId(name: String, pollId: UUID): Boolean
+    fun findAllByPollId(pollId: UUID): List<OptionModel>
 }

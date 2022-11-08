@@ -6,6 +6,7 @@ import br.com.sisvoli.exceptions.conflict.OptionAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.PasswordRecoverAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
+import br.com.sisvoli.exceptions.conflict.VoteAlreadyExistsException
 import br.com.sisvoli.exceptions.invalid.InvalidCPFException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
@@ -33,32 +34,26 @@ class ControllerAdvice {
     fun handleException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0012).responseEntity()
     }
-
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun handleRequestMethodNotSupported(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0011).responseEntity()
     }
-
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun messageNotReadable(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0013).responseEntity()
     }
-
     @ExceptionHandler(InvalidCPFException::class)
     fun invalidCPFException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0015).responseEntity()
     }
-
     @ExceptionHandler(UserNotFoundException::class)
     fun userNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0004).responseEntity()
     }
-
     @ExceptionHandler(CityNotFoundException::class)
     fun cityNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0005).responseEntity()
     }
-
     @ExceptionHandler(PasswordRecoverAlreadyExistsException::class)
     fun passwordRecoverAlreadyExistsException(
         ex: PasswordRecoverAlreadyExistsException,
@@ -70,12 +65,10 @@ class ControllerAdvice {
             internalCode = "PS-0016",
         ).responseEntity()
     }
-
     @ExceptionHandler(RecoverTokenNotFoundException::class)
     fun recoverTokenNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0017).responseEntity()
     }
-
     @ExceptionHandler(InvalidTokenException::class)
     fun invalidTokenException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0018).responseEntity()
@@ -126,5 +119,9 @@ class ControllerAdvice {
     @ExceptionHandler(UserLoggedDidNotUpdateThePollException::class)
     fun userLoggedDidNotUpdateThePollException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0027).responseEntity()
+    }
+    @ExceptionHandler(VoteAlreadyExistsException::class)
+    fun voteAlreadyExistsException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0028).responseEntity()
     }
 }

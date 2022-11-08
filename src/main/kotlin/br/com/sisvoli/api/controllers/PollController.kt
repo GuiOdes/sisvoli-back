@@ -47,9 +47,11 @@ class PollController(
         pollService.cancelById(pollId)
     }
     @PutMapping("/put/{pollId}")
-    fun update(@PathVariable pollId:UUID,
-                @RequestBody pollUpdateRequest: PollUpdateRequest):
-    ResponseEntity<PollModel>{
+    fun update(
+        @PathVariable pollId: UUID,
+        @RequestBody pollUpdateRequest: PollUpdateRequest
+    ):
+        ResponseEntity<PollModel> {
         val userDocument = jwtUtil.getUserDocument()
         return ResponseEntity(pollService.update(pollId, userDocument, pollUpdateRequest), HttpStatus.NO_CONTENT)
     }
