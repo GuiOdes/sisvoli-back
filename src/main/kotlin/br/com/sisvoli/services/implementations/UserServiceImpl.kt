@@ -175,7 +175,7 @@ class UserServiceImpl(
     }
 
     override fun existsByEmail(email: String): Boolean {
-        return !userRepository.existsByEmail(email)
+        return userRepository.existsByEmail(email)
     }
 
     override fun findByCpf(cpf: String): UserModel {
@@ -183,11 +183,11 @@ class UserServiceImpl(
     }
 
     override fun existsByCpf(cpf: String): Boolean {
-        return !userRepository.existsByCpf(cpf)
+        return userRepository.existsByCpf(cpf)
     }
 
     override fun existsByUsername(username: String): Boolean {
-        return !userRepository.existsByUsername(username)
+        return userRepository.existsByUsername(username)
     }
 
     private fun encodePassword(password: String) = passwordEncoder.encode(password)
