@@ -1,5 +1,7 @@
 package br.com.sisvoli.services.implementations
 
+import br.com.sisvoli.api.requests.PollFilters
+import br.com.sisvoli.api.requests.PollPageParams
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.api.requests.PollUpdateRequest
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
@@ -12,6 +14,7 @@ import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.services.interfaces.UserService
 import mu.KotlinLogging
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -36,9 +39,9 @@ class PollServiceImpl(
         }
     }
 
-    override fun findAll(): List<PollModel> {
+    override fun findAllBy(pollPageParams: PollPageParams, filters: PollFilters): Page<PollModel> {
         logger.info { "Starting to list all polls..." }
-        return pollRepository.findAll()
+        return pollRepository.findAllBy(pollPageParams, filters)
     }
 
     override fun findAllByLoggedUser(userDocument: String): List<PollModel> {
