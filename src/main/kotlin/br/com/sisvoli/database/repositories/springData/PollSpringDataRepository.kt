@@ -2,6 +2,8 @@ package br.com.sisvoli.database.repositories.springData
 
 import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.enums.PollStatus
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import java.util.UUID
@@ -19,4 +21,8 @@ interface PollSpringDataRepository : JpaRepository<PollEntity, UUID> {
         nativeQuery = true
     )
     fun findAllPollsToEndToday(): List<PollEntity>
+    @Query(
+        value = "SELECT p FROM PollEntity p WHERE (:pollName is null OR p.title = :pollName)"
+    )
+    fun findAllByTitleContaining(pollName: String?, pageable: Pageable): Page<PollEntity>
 }

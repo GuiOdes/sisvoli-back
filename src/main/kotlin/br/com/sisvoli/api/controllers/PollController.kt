@@ -1,10 +1,13 @@
 package br.com.sisvoli.api.controllers
 
+import br.com.sisvoli.api.requests.PollFilters
+import br.com.sisvoli.api.requests.PollPageParams
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.api.requests.PollUpdateRequest
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.util.JWTUtil
+import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,8 +33,8 @@ class PollController(
         return ResponseEntity(pollService.save(pollRequest, userDocument), HttpStatus.CREATED)
     }
     @GetMapping("/list")
-    fun findAll(): List<PollModel> {
-        return pollService.findAll()
+    fun findAll(pollPageParams: PollPageParams, filters: PollFilters): Page<PollModel> {
+        return pollService.findAllBy(pollPageParams, filters)
     }
     @GetMapping("/list/my")
     fun findAllByLoggedUser(): List<PollModel> {
