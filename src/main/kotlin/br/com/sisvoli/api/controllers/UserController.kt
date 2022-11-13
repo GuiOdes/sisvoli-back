@@ -41,7 +41,7 @@ class UserController(
     @PutMapping("/update")
     fun update(@RequestBody userUpdateRequest: UserUpdateRequest): ResponseEntity<UserResponse> {
         val userDocument = jwtUtil.getUserDocument()
-        return ResponseEntity(userService.updateByUsername(userUpdateRequest, userDocument), HttpStatus.OK)
+        return ResponseEntity(userService.updateByUserDocument(userUpdateRequest, userDocument), HttpStatus.OK)
     }
 
     @PatchMapping("/password-recover/{cpf}")

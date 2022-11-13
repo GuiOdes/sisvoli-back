@@ -4,6 +4,7 @@ import br.com.sisvoli.database.repositories.interfaces.PasswordRecoverTokenRepos
 import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
 import br.com.sisvoli.models.PasswordRecoveryTokenModel
 import br.com.sisvoli.services.interfaces.PasswordRecoverTokenService
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import java.util.UUID
 
@@ -16,6 +17,7 @@ class PasswordRecoverTokenServiceImpl(
     }
 
     override fun generateByUserId(userId: UUID): PasswordRecoveryTokenModel {
+        logger.info { "Starting to generate a new password recover token to user #$userId" }
         val token =
             "${randomLetter()}${randomLetter()}${randomLetter()}${randomLetter()}${randomLetter()}${randomLetter()}"
 
@@ -28,6 +30,7 @@ class PasswordRecoverTokenServiceImpl(
     }
 
     override fun validateByUserDocument(userDocument: String, userResponse: String): Boolean {
+        logger.info { "Validating token for user with document: $userDocument" }
         val findRecover = passwordRecoverTokenRepository.findByUserDocument(userDocument)
             ?: throw RecoverTokenNotFoundException()
 
@@ -39,4 +42,8 @@ class PasswordRecoverTokenServiceImpl(
     }
 
     private fun randomLetter() = ('A'..'Z').random()
+
+    companion object {
+        val logger = KotlinLogging.logger { }
+    }
 }

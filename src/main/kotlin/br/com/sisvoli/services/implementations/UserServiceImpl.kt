@@ -99,19 +99,6 @@ class UserServiceImpl(
         return userRepository.findByUsername(username)
     }
 
-    override fun updateByUsername(userUpdateRequest: UserUpdateRequest, userDocument: String): UserResponse {
-        val userModel = findByCpf(userDocument)
-        val userToSave = userModel.copy(
-            name = userUpdateRequest.name ?: userModel.name,
-            gender = userUpdateRequest.gender ?: userModel.gender,
-            email = userUpdateRequest.email ?: userModel.email,
-            password = userUpdateRequest.password?.let { encodePassword(it) } ?: userModel.password,
-            phoneNumber = userUpdateRequest.phoneNumber ?: userModel.phoneNumber,
-            birthDate = userUpdateRequest.birthDate ?: userModel.birthDate,
-        )
-        return userRepository.save(userToSave).toUserResponse()
-    }
-
     @Transactional
     override fun requestPasswordRecoverByCpf(userCpf: String): UUID {
         val userModel = userRepository.findByCpf(userCpf)
@@ -140,6 +127,19 @@ class UserServiceImpl(
         return userModel.id
     }
 
+    override fun updateByUserDocument(userUpdateRequest: UserUpdateRequest, userDocument: String): UserResponse {
+        val userModel = findByCpf(userDocument)
+        val userToSave = userModel.copy(
+            name = userUpdateRequest.name ?: userModel.name,
+            gender = userUpdateRequest.gender ?: userModel.gender,
+            email = userUpdateRequest.email ?: userModel.email,
+            password = userUpdateRequest.password?.let { encodePassword(it) } ?: userModel.password,
+            phoneNumber = userUpdateRequest.phoneNumber ?: userModel.phoneNumber,
+            birthDate = userUpdateRequest.birthDate ?: userModel.birthDate,
+        )
+        return userRepository.save(userToSave).toUserResponse()
+    }
+
     override fun tokenRecoverValidation(passwordRecoverRequest: PasswordRecoverRequest): Boolean {
         return passwordRecoverTokenService.validateByUserDocument(
             passwordRecoverRequest.cpf,
@@ -158,9 +158,9 @@ class UserServiceImpl(
             throw InvalidTokenException()
         }
 
-        updateByUsername(
+        updateByUserDocument(
             UserUpdateRequest(password = passwordRecoverRequest.newPassword),
-            userRepository.findByCpf(passwordRecoverRequest.cpf).username
+            passwordRecoverRequest.cpf
         )
 
         passwordRecoverTokenService.deleteByTokenAndUserDocument(
