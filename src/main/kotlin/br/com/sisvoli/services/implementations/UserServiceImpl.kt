@@ -18,6 +18,7 @@ import br.com.sisvoli.util.getMillisByMinute
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.fasterxml.jackson.databind.ObjectMapper
+import mu.KotlinLogging
 import org.springframework.http.MediaType
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
@@ -86,6 +87,7 @@ class UserServiceImpl(
         .sign(algorithm)
 
     override fun save(userRequest: UserRequest): UserResponse {
+        logger.info { "Starting to save a user with document: ${userRequest.cpf}" }
         val userModel = userRequest.toUserModel(RoleEnum.DEFAULT.name).copy(
             password = encodePassword(userRequest.password),
             cpf = userRequest.cpf
@@ -101,22 +103,35 @@ class UserServiceImpl(
 
     @Transactional
     override fun requestPasswordRecoverByCpf(userCpf: String): UUID {
+        logger.info { "Starting to request a password reset for user with document: $userCpf..." }
         val userModel = userRepository.findByCpf(userCpf)
+
+        logger.info { "Checking if exists a recovery token from user with document $userCpf..." }
         val recoverTokenModel = userRepository.findRecoverTokenByUserId(userModel.id!!)
 
         if (recoverTokenModel != null) {
+            logger.warn {
+                "A token from user #${userModel.id} exists! Checking if this token is older than" +
+                    "24 hours..."
+            }
             val dayAfterRecoverCreation = recoverTokenModel.creationDate!!.plusDays(1)
             val hourDifference = ChronoUnit.HOURS.between(LocalDateTime.now(), dayAfterRecoverCreation)
 
             if (hourDifference > 0) {
+                logger.warn {
+                    "An active token exists from user #${userModel.id}! A new token can be generated " +
+                        "in $hourDifference hours!"
+                }
                 throw PasswordRecoverAlreadyExistsException(hourDifference)
             }
 
             passwordRecoverTokenService.deleteById(recoverTokenModel.id!!)
         }
 
+        logger.info { "Doesn't exists a token from user #${userModel.id}. Generating a new token..." }
         val token = passwordRecoverTokenService.generateByUserId(userModel.id).token
 
+        logger.info { "Sending mail with password recovery token to ${userModel.email}" }
         emailService.sendMail(
             MailRequest(
                 emailTo = userModel.email,
@@ -129,6 +144,7 @@ class UserServiceImpl(
 
     override fun updateByUserDocument(userUpdateRequest: UserUpdateRequest, userDocument: String): UserResponse {
         val userModel = findByCpf(userDocument)
+        logger.info { "Starting to update user #${userModel.id} data." }
         val userToSave = userModel.copy(
             name = userUpdateRequest.name ?: userModel.name,
             gender = userUpdateRequest.gender ?: userModel.gender,
@@ -141,6 +157,7 @@ class UserServiceImpl(
     }
 
     override fun tokenRecoverValidation(passwordRecoverRequest: PasswordRecoverRequest): Boolean {
+        logger.info { "Validating recovery token..." }
         return passwordRecoverTokenService.validateByUserDocument(
             passwordRecoverRequest.cpf,
             passwordRecoverRequest.token
@@ -149,6 +166,7 @@ class UserServiceImpl(
 
     @Transactional
     override fun updatePassword(passwordRecoverRequest: PasswordRecoverRequest) {
+        logger.info { "Starting to update password of user with document ${passwordRecoverRequest.cpf}" }
         val isValidToken = passwordRecoverTokenService.validateByUserDocument(
             passwordRecoverRequest.cpf,
             passwordRecoverRequest.token
@@ -195,5 +213,6 @@ class UserServiceImpl(
     companion object {
         private const val AUTH_TOKEN_EXPIRATION_MINUTES = 10
         private const val REFRESH_TOKEN_EXPIRATION_MINUTES = 30
+        private val logger = KotlinLogging.logger { }
     }
 }
