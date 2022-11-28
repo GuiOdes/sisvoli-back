@@ -64,4 +64,9 @@ class UserController(
     fun findByDocument(@PathVariable userDocument: String): UserResponse {
         return userService.findByCpf(userDocument).toUserResponse()
     }
+
+    @GetMapping("/user-data")
+    fun getUserData(): UserResponse {
+        return userService.findByCpf(jwtUtil.getUserDocument()).toUserResponse()
+    }
 }
