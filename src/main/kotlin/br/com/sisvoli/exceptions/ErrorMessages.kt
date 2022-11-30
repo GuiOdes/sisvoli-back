@@ -142,5 +142,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.CONFLICT.value(),
         "PS-0028",
         "Essa enquete já foi votada por esse usuário"
+    ),
+    PS_0029(
+        HttpStatus.NOT_FOUND.value(),
+        "PS-0029",
+        "Estado não encontrado"
     )
 }

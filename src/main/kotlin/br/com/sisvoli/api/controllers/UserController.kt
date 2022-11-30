@@ -4,7 +4,6 @@ import br.com.sisvoli.api.requests.PasswordRecoverRequest
 import br.com.sisvoli.api.requests.UserRequest
 import br.com.sisvoli.api.requests.UserUpdateRequest
 import br.com.sisvoli.api.responses.UserResponse
-import br.com.sisvoli.models.UserModel
 import br.com.sisvoli.services.interfaces.UserService
 import br.com.sisvoli.util.JWTUtil
 import org.springframework.http.HttpStatus

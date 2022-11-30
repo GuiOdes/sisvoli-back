@@ -16,6 +16,7 @@ import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
 import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
+import br.com.sisvoli.exceptions.notFound.StateNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
 import com.auth0.jwt.exceptions.TokenExpiredException
 import org.springframework.http.HttpStatus
@@ -123,5 +124,9 @@ class ControllerAdvice {
     @ExceptionHandler(VoteAlreadyExistsException::class)
     fun voteAlreadyExistsException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0028).responseEntity()
+    }
+    @ExceptionHandler(StateNotFoundException::class)
+    fun stateNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0029).responseEntity()
     }
 }
