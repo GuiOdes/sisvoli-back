@@ -36,7 +36,7 @@ class SecurityConfig(
 
         http
             .authorizeRequests()
-            .antMatchers("/login", "/user/password-recover/**", "/user/refresh-token")
+            .antMatchers("/login", "/user/password-recover/**", "/user/refresh-token", "/state/**")
             .permitAll()
             .antMatchers("/user/new")
             .permitAll()

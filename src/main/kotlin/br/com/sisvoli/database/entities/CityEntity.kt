@@ -1,5 +1,6 @@
 package br.com.sisvoli.database.entities
 
+import br.com.sisvoli.models.CityModel
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -22,4 +23,13 @@ class CityEntity(
     @ManyToOne
     @JoinColumn(name = "state_id", nullable = false)
     val state: StateEntity
-)
+) {
+
+    fun toCityModel(): CityModel {
+        return CityModel(
+            id = id,
+            name = name,
+            stateId = state.id!!
+        )
+    }
+}
