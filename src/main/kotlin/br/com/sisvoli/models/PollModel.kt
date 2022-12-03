@@ -16,5 +16,5 @@ data class PollModel(
     val endDate: LocalDateTime,
     val status: PollStatus,
     val userOwnerId: UUID,
-    val optionList: List<String>? = null
+    val optionList: List<OptionModel>? = null
 )

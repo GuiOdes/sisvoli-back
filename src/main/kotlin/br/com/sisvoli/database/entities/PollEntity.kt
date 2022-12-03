@@ -79,7 +79,7 @@ class PollEntity(
             endDate = endDate,
             status = status,
             userOwnerId = userOwner.id!!,
-            optionList = optionList?.map { it.name }
+            optionList = optionList?.map { it.toOptionModel() }
         )
     }
 

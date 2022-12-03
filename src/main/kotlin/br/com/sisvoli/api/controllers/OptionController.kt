@@ -37,7 +37,6 @@ class OptionController(
     fun pollVote(@PathVariable optionId: UUID): ResponseEntity<Unit> {
         return ResponseEntity(voteService.addVote(jwtUtil.getUserDocument(), optionId), HttpStatus.CREATED)
     }
-
     @DeleteMapping("/{optionId}")
     fun deleteById(@PathVariable optionId: UUID) {
         optionService.deleteById(optionId, jwtUtil.getUserDocument())
