@@ -8,4 +8,5 @@ interface OptionService {
     fun save(optionRequest: OptionRequest, userDocument: String): OptionModel
     fun existsByNameAndPollId(name: String, pollId: UUID): Boolean
     fun findAllByPollId(pollId: UUID): List<OptionModel>
+    fun deleteById(optionId: UUID, loggedUserDocument: String)
 }
