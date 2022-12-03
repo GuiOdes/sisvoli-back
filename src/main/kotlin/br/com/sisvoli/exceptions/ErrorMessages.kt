@@ -116,7 +116,7 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
     PS_0023(
         HttpStatus.FORBIDDEN.value(),
         "PS-0023",
-        "Somente quem criou a enquete pode criar as opções de votação"
+        "Somente quem criou a enquete pode criar ou alterar as opções de votação"
     ),
     PS_0024(
         HttpStatus.FORBIDDEN.value(),
@@ -152,5 +152,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.NOT_FOUND.value(),
         "PS-0030",
         "Endereço não encontrado"
+    ),
+    PS_0031(
+        HttpStatus.CONFLICT.value(),
+        "PS-0031",
+        "Essa opção não existe"
     )
 }

@@ -42,4 +42,8 @@ class OptionServiceImpl(
     override fun findAllByPollId(pollId: UUID): List<OptionModel> {
         return optionRepository.findAllByPollId(pollId)
     }
+
+    override fun deleteById(optionId: UUID, loggedUserDocument: String) {
+        return optionRepository.deleteById(optionId, loggedUserDocument)
+    }
 }

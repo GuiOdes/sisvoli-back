@@ -16,6 +16,7 @@ import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.AddressNotFoundException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
+import br.com.sisvoli.exceptions.notFound.OptionNotFoundException
 import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
 import br.com.sisvoli.exceptions.notFound.StateNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
@@ -134,5 +135,10 @@ class ControllerAdvice {
     @ExceptionHandler(AddressNotFoundException::class)
     fun addressNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0030).responseEntity()
+    }
+
+    @ExceptionHandler(OptionNotFoundException::class)
+    fun optionNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0031).responseEntity()
     }
 }

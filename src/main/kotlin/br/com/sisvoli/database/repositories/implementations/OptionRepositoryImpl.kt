@@ -5,6 +5,8 @@ import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.database.repositories.interfaces.OptionRepository
 import br.com.sisvoli.database.repositories.springData.OptionSpringDataRepository
 import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
+import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
+import br.com.sisvoli.exceptions.notFound.OptionNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
 import br.com.sisvoli.models.OptionModel
 import br.com.sisvoli.services.interfaces.PollService
@@ -36,5 +38,16 @@ class OptionRepositoryImpl(
     override fun findAllByPollId(pollId: UUID): List<OptionModel> {
         return optionSpringDataRepository.findAllByPollEntityId(pollId)
             .map { it.toOptionModel() }
+    }
+
+    override fun deleteById(optionId: UUID, loggedUserDocument: String) {
+        val optionEntity = optionSpringDataRepository.findById(optionId)
+            .orElseThrow { OptionNotFoundException() }
+
+        if (optionEntity.pollEntity.userOwner.cpf != loggedUserDocument) {
+            throw UserLoggedDidNotCreatedThePollException()
+        }
+
+        optionSpringDataRepository.deleteById(optionId)
     }
 }
