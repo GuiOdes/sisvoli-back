@@ -17,4 +17,8 @@ class StateServiceImpl(
     override fun findCitiesById(stateId: Long): List<CityModel> {
         return stateRepository.findCitiesById(stateId)
     }
+
+    override fun findById(stateId: Long): StateModel {
+        return stateRepository.findById(stateId)
+    }
 }

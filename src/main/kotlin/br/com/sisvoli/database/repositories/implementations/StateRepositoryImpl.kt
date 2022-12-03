@@ -20,4 +20,10 @@ class StateRepositoryImpl(
         return stateSpringDataRepository.findById(stateId).orElseThrow { StateNotFoundException() }
             .cityList?.map { it.toCityModel() }.orEmpty()
     }
+
+    override fun findById(stateId: Long): StateModel {
+        return stateSpringDataRepository.findById(stateId)
+            .orElseThrow { StateNotFoundException() }
+            .toStateModel()
+    }
 }

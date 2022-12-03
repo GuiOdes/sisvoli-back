@@ -14,6 +14,7 @@ import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
 import br.com.sisvoli.exceptions.invalid.InvalidRefreshTokenException
 import br.com.sisvoli.exceptions.invalid.InvalidTokenException
+import br.com.sisvoli.exceptions.notFound.AddressNotFoundException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
 import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
 import br.com.sisvoli.exceptions.notFound.StateNotFoundException
@@ -128,5 +129,10 @@ class ControllerAdvice {
     @ExceptionHandler(StateNotFoundException::class)
     fun stateNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0029).responseEntity()
+    }
+
+    @ExceptionHandler(AddressNotFoundException::class)
+    fun addressNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0030).responseEntity()
     }
 }
