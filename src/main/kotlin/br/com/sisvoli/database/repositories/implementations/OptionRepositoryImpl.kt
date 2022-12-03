@@ -5,7 +5,9 @@ import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.database.repositories.interfaces.OptionRepository
 import br.com.sisvoli.database.repositories.springData.OptionSpringDataRepository
 import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
+import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
+import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.notFound.OptionNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
 import br.com.sisvoli.models.OptionModel
@@ -44,8 +46,14 @@ class OptionRepositoryImpl(
         val optionEntity = optionSpringDataRepository.findById(optionId)
             .orElseThrow { OptionNotFoundException() }
 
-        if (optionEntity.pollEntity.userOwner.cpf != loggedUserDocument) {
+        val pollEntity = optionEntity.pollEntity
+
+        if (pollEntity.userOwner.cpf != loggedUserDocument) {
             throw UserLoggedDidNotCreatedThePollException()
+        }
+
+        if (pollEntity.status != PollStatus.SCHEDULED) {
+            throw InvalidPollNotScheduledException()
         }
 
         optionSpringDataRepository.deleteById(optionId)
