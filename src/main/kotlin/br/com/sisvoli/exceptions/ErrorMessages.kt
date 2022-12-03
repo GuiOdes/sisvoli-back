@@ -147,5 +147,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.NOT_FOUND.value(),
         "PS-0029",
         "Estado não encontrado"
+    ),
+    PS_0030(
+        HttpStatus.NOT_FOUND.value(),
+        "PS-0030",
+        "Endereço não encontrado"
     )
 }

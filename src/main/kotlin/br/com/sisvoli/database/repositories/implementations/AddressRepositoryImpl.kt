@@ -5,6 +5,7 @@ import br.com.sisvoli.database.repositories.interfaces.AddressRepository
 import br.com.sisvoli.database.repositories.springData.AddressSpringDataRepository
 import br.com.sisvoli.database.repositories.springData.CitySpringDataRepository
 import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
+import br.com.sisvoli.exceptions.notFound.AddressNotFoundException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
 import br.com.sisvoli.models.AddressModel
@@ -25,5 +26,11 @@ class AddressRepositoryImpl(
         val addressEntity = AddressEntity.of(addressModel, cityEntity, userEntity)
 
         return addressSpringDataRepository.save(addressEntity).toAddressModel()
+    }
+
+    override fun findByUserDocument(userDocumentRequest: String): AddressModel {
+        return addressSpringDataRepository.findByUserEntityCpf(userDocumentRequest)
+            .orElseThrow { AddressNotFoundException() }
+            .toAddressModel()
     }
 }
