@@ -9,6 +9,5 @@ data class AddressResponse(
     val street: String,
     val district: String,
     val complement: String,
-    val cityName: String,
-    val stateName: String
+    val cityId: Long
 )

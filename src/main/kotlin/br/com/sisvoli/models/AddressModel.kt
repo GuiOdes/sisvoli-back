@@ -14,17 +14,13 @@ data class AddressModel(
     val userId: UUID
 ) {
 
-    fun toAddressResponse(
-        cityName: String,
-        stateName: String
-    ) = AddressResponse(
+    fun toAddressResponse() = AddressResponse(
         id = id,
         zipCode = zipCode,
         number = number,
         street = street,
         district = district,
         complement = complement,
-        cityName = cityName,
-        stateName = stateName
+        cityId = cityId
     )
 }

@@ -6,17 +6,13 @@ import br.com.sisvoli.api.responses.AddressResponse
 import br.com.sisvoli.database.repositories.interfaces.AddressRepository
 import br.com.sisvoli.models.AddressModel
 import br.com.sisvoli.services.interfaces.AddressService
-import br.com.sisvoli.services.interfaces.CityService
-import br.com.sisvoli.services.interfaces.StateService
 import br.com.sisvoli.services.interfaces.UserService
 import org.springframework.stereotype.Service
 
 @Service
 class AddressServiceImpl(
     private val addressRepository: AddressRepository,
-    private val userService: UserService,
-    private val cityService: CityService,
-    private val stateService: StateService
+    private val userService: UserService
 ) : AddressService {
     override fun save(addressRequest: AddressRequest, userDocument: String): AddressModel {
         val userModel = userService.findByCpf(userDocument)
@@ -26,11 +22,7 @@ class AddressServiceImpl(
     override fun findByUserDocument(userDocumentRequest: String): AddressResponse {
         val addressModel = addressRepository.findByUserDocument(userDocumentRequest)
 
-        val cityModel = cityService.findById(cityId = addressModel.cityId)
-
-        val stateModel = stateService.findById(cityModel.stateId)
-
-        return addressModel.toAddressResponse(cityModel.name, stateModel.name)
+        return addressModel.toAddressResponse()
     }
 
     override fun updateByUserDocument(
@@ -38,7 +30,6 @@ class AddressServiceImpl(
         addressRequest: AddressUpdateRequest
     ): AddressResponse {
         val addressModel = addressRepository.findByUserDocument(userDocumentRequest)
-        val cityModel = cityService.findById(addressRequest.cityId ?: addressModel.cityId)
 
         return addressRepository.save(
             addressModel.copy(
@@ -47,8 +38,8 @@ class AddressServiceImpl(
                 street = addressRequest.street ?: addressModel.zipCode,
                 district = addressRequest.district ?: addressModel.district,
                 complement = addressRequest.complement ?: addressModel.complement,
-                cityId = cityModel.id!!
+                cityId = addressRequest.cityId ?: addressModel.cityId
             )
-        ).toAddressResponse(cityModel.name, stateService.findById(cityModel.stateId).name)
+        ).toAddressResponse()
     }
 }
