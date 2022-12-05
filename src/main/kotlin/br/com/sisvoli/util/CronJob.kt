@@ -18,7 +18,9 @@ class CronJob(
         val scheduledPolls = pollService.findAllScheduledFromToday()
 
         scheduledPolls.forEach {
-            if (it.startDate.format(dateFormatter) == LocalDateTime.now().format(dateFormatter)) {
+            if (it.startDate.format(dateFormatter) == LocalDateTime.now().format(dateFormatter) &&
+                it.status == PollStatus.SCHEDULED && (it.optionList?.size ?: 0) >= 2
+            ) {
                 logger.info { "Starting scheduled poll #${it.id}..." }
                 pollService.changeStatusById(it.id!!, PollStatus.PROGRESS)
             }
@@ -30,7 +32,9 @@ class CronJob(
         val scheduledPolls = pollService.findAllPollsToEndToday()
 
         scheduledPolls.forEach {
-            if (it.endDate.format(dateFormatter) == LocalDateTime.now().format(dateFormatter)) {
+            if (it.endDate.format(dateFormatter) == LocalDateTime.now().format(dateFormatter) &&
+                it.status == PollStatus.PROGRESS
+            ) {
                 logger.info { "Ending scheduled poll #${it.id}..." }
                 pollService.changeStatusById(it.id!!, PollStatus.FINALIZED)
             }

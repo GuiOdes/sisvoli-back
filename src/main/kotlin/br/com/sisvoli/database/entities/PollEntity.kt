@@ -63,7 +63,7 @@ class PollEntity(
     @JoinColumn(name = "user_owner_id", nullable = false)
     val userOwner: UserEntity,
 
-    @OneToMany(mappedBy = "pollEntity", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pollEntity", fetch = FetchType.EAGER)
     val optionList: MutableList<OptionEntity>? = null
 
 ) {

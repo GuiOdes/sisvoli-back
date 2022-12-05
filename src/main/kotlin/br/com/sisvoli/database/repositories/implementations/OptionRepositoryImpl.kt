@@ -58,4 +58,9 @@ class OptionRepositoryImpl(
 
         optionSpringDataRepository.deleteById(optionId)
     }
+
+    override fun findById(optionId: UUID): OptionModel {
+        return optionSpringDataRepository.findById(optionId)
+            .orElseThrow { OptionNotFoundException() }.toOptionModel()
+    }
 }
