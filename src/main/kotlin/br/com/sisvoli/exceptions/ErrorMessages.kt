@@ -157,5 +157,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.CONFLICT.value(),
         "PS-0031",
         "Essa opção não existe"
+    ),
+    PS_0032(
+        HttpStatus.BAD_REQUEST.value(),
+        "PS-0032",
+        "Data inválida"
     )
 }

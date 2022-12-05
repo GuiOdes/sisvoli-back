@@ -7,6 +7,7 @@ import br.com.sisvoli.api.requests.PollUpdateRequest
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
+import br.com.sisvoli.exceptions.invalid.InvalidDateException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
@@ -116,10 +117,13 @@ class PollServiceImpl(
             throw InvalidEndDateException()
         }
 
+        if (!isDateLargerThanActual(pollToSave.startDate)) {
+            throw InvalidDateException()
+        }
+
         return pollRepository.save(pollToSave)
     }
 
-    private fun isEndDateLargerStartDate(endDate: LocalDateTime, startDate: LocalDateTime): Boolean {
-        return endDate > startDate
-    }
+    private fun isEndDateLargerStartDate(endDate: LocalDateTime, startDate: LocalDateTime) = endDate > startDate
+    private fun isDateLargerThanActual(dateTime: LocalDateTime) = dateTime > LocalDateTime.now()
 }

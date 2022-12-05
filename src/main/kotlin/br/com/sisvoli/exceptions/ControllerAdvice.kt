@@ -141,4 +141,9 @@ class ControllerAdvice {
     fun optionNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0031).responseEntity()
     }
+
+    @ExceptionHandler(InvalidEndDateException::class)
+    fun invalidEndDateException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0032).responseEntity()
+    }
 }
