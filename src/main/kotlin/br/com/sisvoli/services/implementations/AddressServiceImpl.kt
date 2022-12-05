@@ -1,6 +1,7 @@
 package br.com.sisvoli.services.implementations
 
 import br.com.sisvoli.api.requests.AddressRequest
+import br.com.sisvoli.api.requests.AddressUpdateRequest
 import br.com.sisvoli.api.responses.AddressResponse
 import br.com.sisvoli.database.repositories.interfaces.AddressRepository
 import br.com.sisvoli.models.AddressModel
@@ -30,5 +31,24 @@ class AddressServiceImpl(
         val stateModel = stateService.findById(cityModel.stateId)
 
         return addressModel.toAddressResponse(cityModel.name, stateModel.name)
+    }
+
+    override fun updateByUserDocument(
+        userDocumentRequest: String,
+        addressRequest: AddressUpdateRequest
+    ): AddressResponse {
+        val addressModel = addressRepository.findByUserDocument(userDocumentRequest)
+        val cityModel = cityService.findById(addressRequest.cityId ?: addressModel.cityId)
+
+        return addressRepository.save(
+            addressModel.copy(
+                zipCode = addressRequest.zipCode ?: addressModel.zipCode,
+                number = addressRequest.number ?: addressModel.number,
+                street = addressRequest.street ?: addressModel.zipCode,
+                district = addressRequest.district ?: addressModel.district,
+                complement = addressRequest.complement ?: addressModel.complement,
+                cityId = cityModel.id!!
+            )
+        ).toAddressResponse(cityModel.name, stateService.findById(cityModel.stateId).name)
     }
 }
