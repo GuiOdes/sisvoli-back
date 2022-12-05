@@ -8,4 +8,5 @@ interface OptionRepository {
     fun existsByNameAndPollEntityId(name: String, pollId: UUID): Boolean
     fun findAllByPollId(pollId: UUID): List<OptionModel>
     fun deleteById(optionId: UUID, loggedUserDocument: String)
+    fun findById(optionId: UUID): OptionModel
 }

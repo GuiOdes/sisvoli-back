@@ -93,23 +93,29 @@ class PollServiceImpl(
     }
 
     override fun update(pollID: UUID, userDocument: String, pollUpdateRequest: PollUpdateRequest): PollModel {
-        val userId = userService.findByCpf(userDocument).id
         val pollModel = pollRepository.findById(pollID)
+
+        if (pollModel.status != PollStatus.SCHEDULED) {
+            throw InvalidPollNotScheduledUpdateException()
+        }
+
+        val userId = userService.findByCpf(userDocument).id
+
+        if (userId != pollModel.userOwnerId) {
+            throw UserLoggedDidNotUpdateThePollException()
+        }
+
         val pollToSave = pollModel.copy(
             title = pollUpdateRequest.title ?: pollModel.title,
             description = pollUpdateRequest.description ?: pollModel.description,
             startDate = pollUpdateRequest.startDate ?: pollModel.startDate,
             endDate = pollUpdateRequest.endDate ?: pollModel.endDate
         )
+
         if (!isEndDateLargerStartDate(pollToSave.endDate, pollToSave.startDate)) {
             throw InvalidEndDateException()
         }
-        if (pollModel.status != PollStatus.SCHEDULED) {
-            throw InvalidPollNotScheduledUpdateException()
-        }
-        if (userId != pollModel.userOwnerId) {
-            throw UserLoggedDidNotUpdateThePollException()
-        }
+
         return pollRepository.save(pollToSave)
     }
 
