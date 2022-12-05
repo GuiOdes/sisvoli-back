@@ -46,4 +46,8 @@ class OptionServiceImpl(
     override fun deleteById(optionId: UUID, loggedUserDocument: String) {
         return optionRepository.deleteById(optionId, loggedUserDocument)
     }
+
+    override fun findById(optionId: UUID): OptionModel {
+        return optionRepository.findById(optionId)
+    }
 }
