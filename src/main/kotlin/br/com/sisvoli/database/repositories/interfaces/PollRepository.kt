@@ -15,4 +15,5 @@ interface PollRepository {
     fun findById(id: UUID): PollModel
     fun findAllScheduledFromToday(): List<PollModel>
     fun findAllPollsToEndToday(): List<PollModel>
+    fun countVotesById(pollId: UUID): Long
 }

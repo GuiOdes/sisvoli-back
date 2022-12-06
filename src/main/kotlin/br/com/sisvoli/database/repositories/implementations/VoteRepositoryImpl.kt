@@ -21,4 +21,12 @@ class VoteRepositoryImpl(
 
         voteSpringDataRepository.save(userId, optionId)
     }
+
+    override fun countVotesOfPollById(pollId: UUID): Long {
+        return voteSpringDataRepository.countByOptionEntityPollEntityId(pollId)
+    }
+
+    override fun countVotesOfOptionById(optionId: UUID): Long {
+        return voteSpringDataRepository.countByOptionEntityId(optionId)
+    }
 }

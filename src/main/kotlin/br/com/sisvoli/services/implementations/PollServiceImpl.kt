@@ -4,16 +4,21 @@ import br.com.sisvoli.api.requests.PollFilters
 import br.com.sisvoli.api.requests.PollPageParams
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.api.requests.PollUpdateRequest
+import br.com.sisvoli.api.responses.OptionRankingResponse
+import br.com.sisvoli.api.responses.PollRankingResponse
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidDateException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
+import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
+import br.com.sisvoli.exceptions.invalid.PollStillInProgressException
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.services.interfaces.UserService
+import br.com.sisvoli.services.interfaces.VoteService
 import mu.KotlinLogging
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
@@ -25,7 +30,8 @@ import java.util.UUID
 @Service
 class PollServiceImpl(
     private val pollRepository: PollRepository,
-    private val userService: UserService
+    private val userService: UserService,
+    private val voteService: VoteService
 ) : PollService {
     override fun save(pollRequest: PollRequest, userDocument: String): PollModel {
         if (isEndDateLargerStartDate(pollRequest.endDate, pollRequest.startDate)) {
@@ -78,11 +84,6 @@ class PollServiceImpl(
         return pollRepository.findAllPollsToEndToday()
     }
 
-    companion object {
-        val logger = KotlinLogging.logger { }
-        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    }
-
     override fun cancelById(pollId: UUID) {
         val pollModel = pollRepository.findById(pollId)
 
@@ -124,6 +125,42 @@ class PollServiceImpl(
         return pollRepository.save(pollToSave)
     }
 
+    override fun getRankingByPollId(pollId: UUID, userViewDocument: String): PollRankingResponse {
+        val pollModel = findById(pollId)
+        val userModel = userService.findByCpf(userViewDocument)
+
+        if (pollModel.status == PollStatus.SCHEDULED) {
+            throw InvalidPollNotScheduledException() // TODO alterar exceção
+        }
+
+        val optionRankingResponseList = pollModel.optionList!!.map {
+            OptionRankingResponse(
+                id = it.id!!,
+                name = it.name,
+                totalVotes = voteService.countVotesOfOptionById(it.id),
+            )
+        }
+
+        if (pollModel.status == PollStatus.PROGRESS && userModel.id != pollModel.userOwnerId) {
+            throw PollStillInProgressException()
+        }
+
+        return PollRankingResponse(
+            pollId = pollModel.id!!,
+            voteCount = voteService.countVotesOfPollById(pollId),
+            optionRanking = optionRankingResponseList
+        )
+    }
+
+    override fun countVotesById(pollId: UUID): Long {
+        return pollRepository.countVotesById(pollId)
+    }
+
     private fun isEndDateLargerStartDate(endDate: LocalDateTime, startDate: LocalDateTime) = endDate > startDate
     private fun isDateLargerThanActual(dateTime: LocalDateTime) = dateTime > LocalDateTime.now()
+
+    companion object {
+        val logger = KotlinLogging.logger { }
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    }
 }

@@ -4,6 +4,7 @@ import br.com.sisvoli.api.requests.PollFilters
 import br.com.sisvoli.api.requests.PollPageParams
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.api.requests.PollUpdateRequest
+import br.com.sisvoli.api.responses.PollRankingResponse
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.models.PollModel
 import org.springframework.data.domain.Page
@@ -20,4 +21,6 @@ interface PollService {
     fun findAllPollsToEndToday(): List<PollModel>
     fun cancelById(pollId: UUID)
     fun update(pollID: UUID, userDocument: String, pollUpdateRequest: PollUpdateRequest): PollModel
+    fun getRankingByPollId(pollId: UUID, userViewDocument: String): PollRankingResponse
+    fun countVotesById(pollId: UUID): Long
 }

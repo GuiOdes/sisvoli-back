@@ -50,4 +50,8 @@ class OptionServiceImpl(
     override fun findById(optionId: UUID): OptionModel {
         return optionRepository.findById(optionId)
     }
+
+    override fun countVotesById(optionId: UUID): Long {
+        return optionRepository.countVotesById(optionId)
+    }
 }
