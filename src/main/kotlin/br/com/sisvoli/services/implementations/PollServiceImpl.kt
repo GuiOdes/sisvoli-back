@@ -14,18 +14,17 @@ import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
-import br.com.sisvoli.exceptions.invalid.PollStillInProgressException
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.services.interfaces.UserService
 import br.com.sisvoli.services.interfaces.VoteService
-import mu.KotlinLogging
-import org.springframework.data.domain.Page
-import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.UUID
+import mu.KotlinLogging
+import org.springframework.data.domain.Page
+import org.springframework.stereotype.Service
 
 @Service
 class PollServiceImpl(
@@ -142,7 +141,7 @@ class PollServiceImpl(
         }
 
         if (pollModel.status == PollStatus.PROGRESS && userModel.id != pollModel.userOwnerId) {
-            throw PollStillInProgressException()
+            throw InvalidPollNotScheduledException()
         }
 
         return PollRankingResponse(
