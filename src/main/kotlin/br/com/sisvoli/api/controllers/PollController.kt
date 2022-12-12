@@ -4,6 +4,7 @@ import br.com.sisvoli.api.requests.PollFilters
 import br.com.sisvoli.api.requests.PollPageParams
 import br.com.sisvoli.api.requests.PollRequest
 import br.com.sisvoli.api.requests.PollUpdateRequest
+import br.com.sisvoli.api.responses.PollRankingResponse
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.util.JWTUtil
@@ -57,5 +58,9 @@ class PollController(
         ResponseEntity<PollModel> {
         val userDocument = jwtUtil.getUserDocument()
         return ResponseEntity(pollService.update(pollId, userDocument, pollUpdateRequest), HttpStatus.NO_CONTENT)
+    }
+    @GetMapping("/indicators/{pollId}")
+    fun getRankingByPollId(@PathVariable pollId: UUID): PollRankingResponse {
+        return pollService.getRankingByPollId(pollId, jwtUtil.getUserDocument())
     }
 }

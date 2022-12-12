@@ -15,4 +15,6 @@ interface VoteSpringDataRepository : JpaRepository<VoteEntity, UserOptionKey> {
     )
     fun save(userId: UUID, optionId: UUID)
     fun existsByOptionEntityPollEntityIdAndUserEntityId(pollId: UUID, userId: UUID): Boolean
+    fun countByOptionEntityPollEntityId(pollId: UUID): Long
+    fun countByOptionEntityId(optionId: UUID): Long
 }

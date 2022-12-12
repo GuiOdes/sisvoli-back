@@ -6,6 +6,7 @@ import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.database.repositories.springData.PollSpringDataRepository
 import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
+import br.com.sisvoli.database.repositories.springData.VoteSpringDataRepository
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.exceptions.notFound.PollNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
@@ -19,7 +20,8 @@ import java.util.UUID
 @Component
 class PollRepositoryImpl(
     private val pollSpringDataRepository: PollSpringDataRepository,
-    private val userSpringDataRepository: UserSpringDataRepository
+    private val userSpringDataRepository: UserSpringDataRepository,
+    private val voteSpringDataRepository: VoteSpringDataRepository
 ) : PollRepository {
     override fun save(pollModel: PollModel): PollModel {
         val pollEntity = PollEntity.of(
@@ -55,5 +57,9 @@ class PollRepositoryImpl(
     override fun findAllPollsToEndToday(): List<PollModel> {
         return pollSpringDataRepository.findAllPollsToEndToday()
             .map { it.toPollModel() }
+    }
+
+    override fun countVotesById(pollId: UUID): Long {
+        return voteSpringDataRepository.countByOptionEntityPollEntityId(pollId)
     }
 }

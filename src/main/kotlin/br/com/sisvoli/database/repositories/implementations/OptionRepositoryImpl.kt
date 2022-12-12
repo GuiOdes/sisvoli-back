@@ -1,34 +1,28 @@
 package br.com.sisvoli.database.repositories.implementations
 
 import br.com.sisvoli.database.entities.OptionEntity
-import br.com.sisvoli.database.entities.PollEntity
 import br.com.sisvoli.database.repositories.interfaces.OptionRepository
 import br.com.sisvoli.database.repositories.springData.OptionSpringDataRepository
-import br.com.sisvoli.database.repositories.springData.UserSpringDataRepository
+import br.com.sisvoli.database.repositories.springData.PollSpringDataRepository
+import br.com.sisvoli.database.repositories.springData.VoteSpringDataRepository
 import br.com.sisvoli.enums.PollStatus
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.notFound.OptionNotFoundException
-import br.com.sisvoli.exceptions.notFound.UserNotFoundException
+import br.com.sisvoli.exceptions.notFound.PollNotFoundException
 import br.com.sisvoli.models.OptionModel
-import br.com.sisvoli.services.interfaces.PollService
 import org.springframework.stereotype.Component
 import java.util.UUID
 
 @Component
 class OptionRepositoryImpl(
     private val optionSpringDataRepository: OptionSpringDataRepository,
-    private val userSpringDataRepository: UserSpringDataRepository,
-    private val pollService: PollService
-
+    private val pollSpringDataRepository: PollSpringDataRepository,
+    private val voteSpringDataRepository: VoteSpringDataRepository
 ) : OptionRepository {
     override fun save(optionModel: OptionModel, pollID: UUID): OptionModel {
-        val pollEntity = PollEntity.of(
-            pollService.findById(pollID),
-            userSpringDataRepository
-                .findById(pollService.findById(pollID).userOwnerId)
-                .orElseThrow { UserNotFoundException() }
-        )
+        val pollEntity = pollSpringDataRepository.findById(pollID).orElseThrow { PollNotFoundException() }
+
         val optionEntity = OptionEntity.of(optionModel, pollEntity)
         return optionSpringDataRepository.save(optionEntity).toOptionModel()
     }
@@ -62,5 +56,9 @@ class OptionRepositoryImpl(
     override fun findById(optionId: UUID): OptionModel {
         return optionSpringDataRepository.findById(optionId)
             .orElseThrow { OptionNotFoundException() }.toOptionModel()
+    }
+
+    override fun countVotesById(optionId: UUID): Long {
+        return voteSpringDataRepository.countByOptionEntityId(optionId)
     }
 }
