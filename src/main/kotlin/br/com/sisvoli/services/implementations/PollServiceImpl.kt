@@ -8,6 +8,7 @@ import br.com.sisvoli.api.responses.OptionRankingResponse
 import br.com.sisvoli.api.responses.PollRankingResponse
 import br.com.sisvoli.database.repositories.interfaces.PollRepository
 import br.com.sisvoli.enums.PollStatus
+import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidDateException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
@@ -141,7 +142,7 @@ class PollServiceImpl(
         }
 
         if (pollModel.status == PollStatus.PROGRESS && userModel.id != pollModel.userOwnerId) {
-            throw InvalidPollNotScheduledException()
+            throw UserLoggedDidNotCreatedThePollException()
         }
 
         return PollRankingResponse(
