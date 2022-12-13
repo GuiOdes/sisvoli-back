@@ -134,8 +134,8 @@ class PollServiceImpl(
         val pollModel = findById(pollId)
         val userModel = userService.findByCpf(userViewDocument)
 
-        if (pollModel.status == PollStatus.SCHEDULED) {
-            throw InvalidPollNotScheduledException() // TODO alterar exceção
+        if (pollModel.status != PollStatus.FINALIZED && userModel.id != pollModel.userOwnerId) {
+            throw UserLoggedDidNotCreatedThePollException()
         }
 
         val optionRankingResponseList = pollModel.optionList!!.map {
@@ -144,10 +144,6 @@ class PollServiceImpl(
                 name = it.name,
                 totalVotes = voteService.countVotesOfOptionById(it.id),
             )
-        }
-
-        if (pollModel.status == PollStatus.PROGRESS && userModel.id != pollModel.userOwnerId) {
-            throw UserLoggedDidNotCreatedThePollException()
         }
 
         return PollRankingResponse(
