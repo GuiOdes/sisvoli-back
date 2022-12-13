@@ -41,15 +41,17 @@ class OptionServiceImpl(
                 throw OptionAlreadyExistsException()
             }
 
-            optionList.add(
-                optionRepository.save(
-                    OptionModel(
-                        id = null,
-                        it,
-                        optionRequest.pollId
+            if (it.isNotBlank()) {
+                optionList.add(
+                    optionRepository.save(
+                        OptionModel(
+                            id = null,
+                            it,
+                            optionRequest.pollId
+                        )
                     )
                 )
-            )
+            }
         }
 
         return optionList
