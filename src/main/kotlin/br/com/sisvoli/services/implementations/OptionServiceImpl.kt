@@ -46,7 +46,7 @@ class OptionServiceImpl(
                     optionRepository.save(
                         OptionModel(
                             id = null,
-                            it,
+                            it.trim(),
                             optionRequest.pollId
                         )
                     )
