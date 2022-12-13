@@ -61,4 +61,8 @@ class OptionRepositoryImpl(
     override fun countVotesById(optionId: UUID): Long {
         return voteSpringDataRepository.countByOptionEntityId(optionId)
     }
+
+    override fun deleteAllByPollId(pollId: UUID) {
+        optionSpringDataRepository.deleteAllByPollEntityId(pollId)
+    }
 }

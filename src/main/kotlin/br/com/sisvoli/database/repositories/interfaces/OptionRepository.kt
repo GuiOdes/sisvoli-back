@@ -10,4 +10,5 @@ interface OptionRepository {
     fun deleteById(optionId: UUID, loggedUserDocument: String)
     fun findById(optionId: UUID): OptionModel
     fun countVotesById(optionId: UUID): Long
+    fun deleteAllByPollId(pollId: UUID)
 }

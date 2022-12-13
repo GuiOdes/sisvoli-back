@@ -34,6 +34,8 @@ class OptionServiceImpl(
             throw UserLoggedDidNotCreatedThePollException()
         }
 
+        optionRepository.deleteAllByPollId(optionRequest.pollId)
+
         optionRequest.optionsName.forEach {
             if (existsByNameAndPollId(it, pollModel.id!!)) {
                 throw OptionAlreadyExistsException()
@@ -44,7 +46,7 @@ class OptionServiceImpl(
                     OptionModel(
                         id = null,
                         it,
-                        pollModel.id
+                        optionRequest.pollId
                     )
                 )
             )
