@@ -48,7 +48,7 @@ class PollController(
     }
     @PatchMapping("/cancel/{pollId}")
     fun cancelById(@PathVariable pollId: UUID) {
-        pollService.cancelById(pollId)
+        pollService.cancelById(pollId, jwtUtil.getUserDocument())
     }
     @PutMapping("/put/{pollId}")
     fun update(

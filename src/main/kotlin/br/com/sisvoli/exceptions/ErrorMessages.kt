@@ -116,7 +116,7 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
     PS_0023(
         HttpStatus.FORBIDDEN.value(),
         "PS-0023",
-        "Somente quem criou a enquete pode criar as opções de votação e visualizar o relatório antes da conclusão da enquete"
+        "Somente quem criou a enquete pode realizar essa operação"
     ),
     PS_0024(
         HttpStatus.FORBIDDEN.value(),

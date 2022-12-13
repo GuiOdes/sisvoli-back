@@ -84,8 +84,13 @@ class PollServiceImpl(
         return pollRepository.findAllPollsToEndToday()
     }
 
-    override fun cancelById(pollId: UUID) {
+    override fun cancelById(pollId: UUID, userDocument: String) {
         val pollModel = pollRepository.findById(pollId)
+        val userModel = userService.findByCpf(userDocument)
+
+        if (pollModel.userOwnerId != userModel.id) {
+            throw UserLoggedDidNotCreatedThePollException()
+        }
 
         if (pollModel.status != PollStatus.SCHEDULED) {
             throw InvalidPollCancelRequest()

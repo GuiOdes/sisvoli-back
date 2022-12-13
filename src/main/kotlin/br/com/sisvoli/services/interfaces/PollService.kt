@@ -19,7 +19,7 @@ interface PollService {
     fun changeStatusById(id: UUID, status: PollStatus): PollModel
     fun findAllScheduledFromToday(): List<PollModel>
     fun findAllPollsToEndToday(): List<PollModel>
-    fun cancelById(pollId: UUID)
+    fun cancelById(pollId: UUID, userDocument: String)
     fun update(pollID: UUID, userDocument: String, pollUpdateRequest: PollUpdateRequest): PollModel
     fun getRankingByPollId(pollId: UUID, userViewDocument: String): PollRankingResponse
     fun countVotesById(pollId: UUID): Long
