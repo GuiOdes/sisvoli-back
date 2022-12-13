@@ -1,9 +1,9 @@
 package br.com.sisvoli.api.responses
 
-import java.util.UUID
+import br.com.sisvoli.models.PollModel
 
 data class PollRankingResponse(
-    val pollId: UUID,
+    val pollId: PollModel,
     val voteCount: Long,
     val optionRanking: List<OptionRankingResponse>
 )

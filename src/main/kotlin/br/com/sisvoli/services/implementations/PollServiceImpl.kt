@@ -146,7 +146,7 @@ class PollServiceImpl(
         }
 
         return PollRankingResponse(
-            pollId = pollModel.id!!,
+            pollId = pollModel.copy(optionList = null),
             voteCount = voteService.countVotesOfPollById(pollId),
             optionRanking = optionRankingResponseList
         )
