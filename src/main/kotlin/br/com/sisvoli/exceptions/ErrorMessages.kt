@@ -162,5 +162,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.BAD_REQUEST.value(),
         "PS-0032",
         "Data inválida"
+    ),
+    PS_0033(
+        HttpStatus.NOT_FOUND.value(),
+        "PS-0033",
+        "Enquete não encontrada"
     )
 }

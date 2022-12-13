@@ -18,6 +18,7 @@ import br.com.sisvoli.exceptions.invalid.InvalidTokenException
 import br.com.sisvoli.exceptions.notFound.AddressNotFoundException
 import br.com.sisvoli.exceptions.notFound.CityNotFoundException
 import br.com.sisvoli.exceptions.notFound.OptionNotFoundException
+import br.com.sisvoli.exceptions.notFound.PollNotFoundException
 import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
 import br.com.sisvoli.exceptions.notFound.StateNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
@@ -146,5 +147,10 @@ class ControllerAdvice {
     @ExceptionHandler(InvalidDateException::class)
     fun invalidEndDateException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0032).responseEntity()
+    }
+
+    @ExceptionHandler(PollNotFoundException::class)
+    fun pollNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0033).responseEntity()
     }
 }
