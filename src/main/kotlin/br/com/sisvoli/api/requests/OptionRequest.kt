@@ -3,9 +3,10 @@ package br.com.sisvoli.api.requests
 import br.com.sisvoli.models.OptionModel
 import java.util.UUID
 import javax.validation.constraints.NotBlank
+import javax.validation.constraints.NotEmpty
 
 data class OptionRequest(
-    @field: NotBlank(message = "Digite o nome da opção")
+    @field: NotEmpty(message = "Você precisa enviar ao menos uma opção")
     val optionsName: List<String>,
     val pollId: UUID
 ) {
