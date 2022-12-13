@@ -23,6 +23,7 @@ import br.com.sisvoli.exceptions.notFound.RecoverTokenNotFoundException
 import br.com.sisvoli.exceptions.notFound.StateNotFoundException
 import br.com.sisvoli.exceptions.notFound.UserNotFoundException
 import com.auth0.jwt.exceptions.TokenExpiredException
+import org.hibernate.TypeMismatchException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
@@ -151,6 +152,11 @@ class ControllerAdvice {
 
     @ExceptionHandler(PollNotFoundException::class)
     fun pollNotFoundException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
+        return ErrorResponse.of(ErrorMessages.PS_0033).responseEntity()
+    }
+
+    @ExceptionHandler(TypeMismatchException::class)
+    fun typeMismatchException(ex: Exception, request: WebRequest): ResponseEntity<ErrorResponse> {
         return ErrorResponse.of(ErrorMessages.PS_0033).responseEntity()
     }
 }

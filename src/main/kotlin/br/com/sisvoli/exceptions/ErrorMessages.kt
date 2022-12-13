@@ -167,5 +167,10 @@ enum class ErrorMessages(val httpCode: Int, val code: String, val message: Strin
         HttpStatus.NOT_FOUND.value(),
         "PS-0033",
         "Enquete não encontrada"
+    ),
+    PS_0034(
+        HttpStatus.NOT_FOUND.value(),
+        "PS-0034",
+        "Algo em sua requisição não pôde ser processado na aplicação"
     )
 }
