@@ -60,6 +60,10 @@ dependencies {
 
 	// Mail
 	implementation("org.springframework.boot:spring-boot-starter-mail:2.7.4")
+
+	// Tests
+	implementation("com.ninja-squad:springmockk:4.0.0")
+	testImplementation("org.springframework.security:spring-security-test:6.0.0")
 }
 
 detekt {

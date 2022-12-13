@@ -29,7 +29,7 @@ class OptionController(
         return optionService.findAllByPollId(pollId)
     }
     @PostMapping("/new")
-    fun save(@RequestBody @Valid optionRequest: OptionRequest): ResponseEntity<OptionModel> {
+    fun save(@RequestBody @Valid optionRequest: OptionRequest): ResponseEntity<List<OptionModel>> {
         val userDocument = jwtUtil.getUserDocument()
         return ResponseEntity(optionService.save(optionRequest, userDocument), HttpStatus.CREATED)
     }

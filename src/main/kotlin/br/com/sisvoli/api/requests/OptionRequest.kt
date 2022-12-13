@@ -6,13 +6,15 @@ import javax.validation.constraints.NotBlank
 
 data class OptionRequest(
     @field: NotBlank(message = "Digite o nome da opção")
-    val name: String,
+    val optionsName: List<String>,
     val pollId: UUID
 ) {
-    fun toOptionModel(): OptionModel {
-        return OptionModel(
-            name = name,
-            pollId = pollId
-        )
+    fun toOptionModelList(): List<OptionModel> {
+        return optionsName.map {
+            OptionModel(
+                name = it,
+                pollId = pollId
+            )
+        }
     }
 }

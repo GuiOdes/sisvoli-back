@@ -12,6 +12,7 @@ import br.com.sisvoli.services.interfaces.PollService
 import br.com.sisvoli.services.interfaces.UserService
 import org.springframework.stereotype.Service
 import java.util.UUID
+import javax.transaction.Transactional
 
 @Service
 class OptionServiceImpl(
@@ -19,20 +20,37 @@ class OptionServiceImpl(
     private val pollService: PollService,
     private val userService: UserService
 ) : OptionService {
-    override fun save(optionRequest: OptionRequest, userDocument: String): OptionModel {
+    @Transactional
+    override fun save(optionRequest: OptionRequest, userDocument: String): List<OptionModel> {
         val userID = userService.findByCpf(userDocument).id
         val pollModel = pollService.findById(optionRequest.pollId)
+        val optionList = mutableListOf<OptionModel>()
 
         if (pollModel.status != PollStatus.SCHEDULED) {
             throw InvalidPollNotScheduledException()
         }
+
         if (userID != pollModel.userOwnerId) {
             throw UserLoggedDidNotCreatedThePollException()
         }
-        if (existsByNameAndPollId(optionRequest.name, pollModel.id!!)) {
-            throw OptionAlreadyExistsException()
+
+        optionRequest.optionsName.forEach {
+            if (existsByNameAndPollId(it, pollModel.id!!)) {
+                throw OptionAlreadyExistsException()
+            }
+
+            optionList.add(
+                optionRepository.save(
+                    OptionModel(
+                        id = null,
+                        it,
+                        pollModel.id
+                    )
+                )
+            )
         }
-        return optionRepository.save(optionRequest.toOptionModel(), pollModel.id)
+
+        return optionList
     }
 
     override fun existsByNameAndPollId(name: String, pollId: UUID): Boolean {

@@ -20,8 +20,8 @@ class OptionRepositoryImpl(
     private val pollSpringDataRepository: PollSpringDataRepository,
     private val voteSpringDataRepository: VoteSpringDataRepository
 ) : OptionRepository {
-    override fun save(optionModel: OptionModel, pollID: UUID): OptionModel {
-        val pollEntity = pollSpringDataRepository.findById(pollID).orElseThrow { PollNotFoundException() }
+    override fun save(optionModel: OptionModel): OptionModel {
+        val pollEntity = pollSpringDataRepository.findById(optionModel.pollId).orElseThrow { PollNotFoundException() }
 
         val optionEntity = OptionEntity.of(optionModel, pollEntity)
         return optionSpringDataRepository.save(optionEntity).toOptionModel()

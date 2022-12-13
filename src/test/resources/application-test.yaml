@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5434/sisvoli_test
+    username: app_sisvoli
+    password: app_sisvoli
+  jackson:
+    default-property-inclusion: non_null
+
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: sisvoli.app@gmail.com
+    password: itgsienzygweifjd
+    port: 587
