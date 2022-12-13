@@ -37,11 +37,7 @@ class OptionServiceImpl(
         optionRepository.deleteAllByPollId(optionRequest.pollId)
 
         optionRequest.optionsName.forEach {
-            if (existsByNameAndPollId(it, pollModel.id!!)) {
-                throw OptionAlreadyExistsException()
-            }
-
-            if (it.isNotBlank()) {
+            if (!existsByNameAndPollId(it, pollModel.id!!) && it.isNotBlank()) {
                 optionList.add(
                     optionRepository.save(
                         OptionModel(
