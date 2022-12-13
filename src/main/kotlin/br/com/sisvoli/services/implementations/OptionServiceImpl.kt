@@ -3,7 +3,6 @@ package br.com.sisvoli.services.implementations
 import br.com.sisvoli.api.requests.OptionRequest
 import br.com.sisvoli.database.repositories.interfaces.OptionRepository
 import br.com.sisvoli.enums.PollStatus
-import br.com.sisvoli.exceptions.conflict.OptionAlreadyExistsException
 import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotCreatedThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.models.OptionModel

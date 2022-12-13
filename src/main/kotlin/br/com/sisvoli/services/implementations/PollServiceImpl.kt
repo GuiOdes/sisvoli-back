@@ -13,7 +13,6 @@ import br.com.sisvoli.exceptions.conflict.UserLoggedDidNotUpdateThePollException
 import br.com.sisvoli.exceptions.invalid.InvalidDateException
 import br.com.sisvoli.exceptions.invalid.InvalidEndDateException
 import br.com.sisvoli.exceptions.invalid.InvalidPollCancelRequest
-import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledException
 import br.com.sisvoli.exceptions.invalid.InvalidPollNotScheduledUpdateException
 import br.com.sisvoli.models.PollModel
 import br.com.sisvoli.services.interfaces.PollService
