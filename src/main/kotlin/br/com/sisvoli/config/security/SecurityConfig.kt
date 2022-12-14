@@ -36,9 +36,14 @@ class SecurityConfig(
 
         http
             .authorizeRequests()
-            .antMatchers("/login", "/user/password-recover/**", "/user/refresh-token", "/state/**")
-            .permitAll()
-            .antMatchers("/user/new")
+            .antMatchers(
+                "/login",
+                "/user/password-recover/**",
+                "/user/refresh-token",
+                "/state/**",
+                "/user/new",
+                "/poll/list"
+            )
             .permitAll()
             .anyRequest()
             .authenticated()
